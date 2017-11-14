@@ -9,7 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
         <ImageView
             android:id="@+id/iv_task_image"
@@ -25,6 +27,12 @@
             android:layout_height="wrap_content"
             android:onClick="onAddPicture"
             android:text="@string/btn_take_image" />
+
+        <fragment
+            android:id="@+id/f_map"
+            class="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="500px" />
 
         <EditText
             android:id="@+id/et_task_description"

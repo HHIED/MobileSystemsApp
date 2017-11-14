@@ -1,5 +1,7 @@
 package dk.sdu.lahan14.cleanthestreet;
 
+import android.content.Intent;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,12 +41,12 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
         mAcceptTaskButton = findViewById(R.id.btn_accept_task);
 
         // TODO: get task
-        /* For testing
+        /* For testing */
         Location location = new Location("this");
         location.setLatitude(-33.852);
         location.setLongitude(151.211);
         mTask = new Task(null, "Something to clean up", 8, location, "Johny");
-        */
+
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.f_view_task_map);
         mapFragment.getMapAsync(this);
@@ -78,14 +80,21 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng latLng = new LatLng(mTask.getLocation().getLatitude(), mTask.getLocation().getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(latLng));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        try {
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            LatLng latLng = new LatLng(mTask.getLocation().getLatitude(), mTask.getLocation().getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(latLng));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        } catch (SecurityException se) {
+
+        }
     }
 
     public void onAcceptTask(View view) {
         // TODO: identify self
         mTask.setAccepter("Me");
-        // TODO: start AcceptTaskActivity
+        Intent completeActivityIntent = new Intent(this, CompleteTaskActivity.class);
+        startActivity(completeActivityIntent);
     }
 }
