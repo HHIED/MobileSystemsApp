@@ -8,12 +8,11 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -34,32 +33,33 @@ import java.io.IOException;
 
 public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private static final String TAG = "BASIC_TASK";
+
     protected Context context;
     protected FusedLocationProviderClient mFusedLocationProviderClient;
     protected GoogleMap mMap;
     protected Location mLastKnownLocation;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     public void setContext(Context context) {
         this.context = context;
-
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
     public void onAddPicture(View view) {
-        CharSequence[] items = {context.getString(R.string.dlg_option_gallery), context.getString(R.string.dlg_option_camera)};
+        CharSequence[] items = {getString(R.string.dlg_option_camera), getString(R.string.dlg_option_gallery)};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.dlg_choose_image_source).setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
-                    getImageFromGallery();
-                } else if (i == 1) {
                     getImageFromCamera();
+                } else if (i == 1) {
+                    getImageFromGallery();
                 }
             }
         });
@@ -103,7 +103,7 @@ public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCa
 
         updateLocationUI();
 
-        getDeviceLocation();
+        setDeviceLocationOnMap();
     }
 
     protected void updateLocationUI() {
@@ -114,26 +114,31 @@ public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCa
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
         } catch (SecurityException se) {
-
+            Log.e(TAG, se.getMessage());
         }
     }
 
-    protected void getDeviceLocation() {
-        try {
-            com.google.android.gms.tasks.Task locationResult = mFusedLocationProviderClient.getLastLocation();
-            locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful()) {
-                        mLastKnownLocation = (Location) task.getResult();
-                        LatLng latLng = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-                        mMap.addMarker(new MarkerOptions().position(latLng));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-                    }
+    protected void setDeviceLocationOnMap() {
+        Task locationResult = getLastLocation();
+        locationResult.addOnCompleteListener(this, new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
+                    mLastKnownLocation = (Location) task.getResult();
+                    LatLng latLng = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(latLng));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 }
+            }
             });
+    }
+
+    protected Task getLastLocation() {
+        try {
+            return mFusedLocationProviderClient.getLastLocation();
         } catch (SecurityException se) {
 
         }
+        return null;
     }
 }

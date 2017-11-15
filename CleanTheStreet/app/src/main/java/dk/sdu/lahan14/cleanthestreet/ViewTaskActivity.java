@@ -2,8 +2,9 @@ package dk.sdu.lahan14.cleanthestreet;
 
 import android.content.Intent;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,11 +14,13 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 
-public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ViewTaskActivity extends BasicTaskActivity {
+
+    private static final String TAG = "VIEW_TASK";
 
     private Task mTask;
 
@@ -47,19 +50,19 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
         location.setLongitude(151.211);
         mTask = new Task(null, "Something to clean up", 8, location, "Johny");
 
-
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.f_view_task_map);
         mapFragment.getMapAsync(this);
 
         updateDisplayData();
+
     }
 
     private void updateDisplayData() {
         mTaskCreatorTextView.setText(mTask.getCreator());
         mIamgeView.setImageBitmap(mTask.getImage());
         mDescriptionTextView.setText(mTask.getDescription());
-        calculateAndSetDistance();
         mRatingBar.setRating(mTask.getScore());
+        calculateAndSetDistance();
         // TODO: identify self
         if (null != mTask.getAccepter()) {
             mAcceptTaskButton.setClickable(false);
@@ -69,8 +72,22 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     private void calculateAndSetDistance() {
-        //TODO: calculate distance
-        mDistanceTextView.setText("0.7 km");
+        getLastLocation().addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task task) {
+                if (task.isSuccessful()) {
+                    Location deviceLocation = (Location) task.getResult();
+                    if (deviceLocation != null) {
+                        float distanceInMeters = deviceLocation.distanceTo(mTask.getLocation());
+                        if (distanceInMeters > 1000) {
+                            mDistanceTextView.setText(String.format("%.2f km", distanceInMeters / 1000.0 ));
+                        } else {
+                            mDistanceTextView.setText(String.format("%d m", (int) distanceInMeters));
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void onUpvote(View view) {
@@ -87,7 +104,7 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
             googleMap.addMarker(new MarkerOptions().position(latLng));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         } catch (SecurityException se) {
-
+            Log.e(TAG, se.getMessage());
         }
     }
 
@@ -95,6 +112,8 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
         // TODO: identify self
         mTask.setAccepter("Me");
         Intent completeActivityIntent = new Intent(this, CompleteTaskActivity.class);
+        completeActivityIntent.putExtra(Task.class.toString(), mTask);
         startActivity(completeActivityIntent);
     }
+
 }
