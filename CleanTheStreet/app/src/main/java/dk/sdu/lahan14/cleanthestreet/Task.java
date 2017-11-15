@@ -19,6 +19,12 @@ public class Task {
     private final String creator;
     private String accepter;
 
+    public Task(int score, String description) {
+        this.score = score;
+        this.description = description;
+        this.creator = null;
+    }
+
     public Task(Bitmap image, String description, int score, Location location, String creator) {
         this.image = image;
         this.description = description;
