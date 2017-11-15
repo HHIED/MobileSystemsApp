@@ -53,7 +53,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     private void updateDisplayData() {
         mCreatorTextView.setText(mTask.getCreator());
         mDescriptionTextView.setText(mTask.getDescription());
-        mRatingBar.setRating(mTask.getRating());
+        mRatingBar.setRating(mTask.getScore());
         mTaskImageView.setImageBitmap(mTask.getImage());
     }
 
