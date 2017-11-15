@@ -40,7 +40,7 @@ public class Task implements Parcelable {
         this.description = parcel.readString();
         this.score = parcel.readFloat();
         this.location = Location.CREATOR.createFromParcel(parcel);
-        //this.image = Bitmap.CREATOR.createFromParcel(parcel);
+        this.image = Bitmap.CREATOR.createFromParcel(parcel);
         this.creator = parcel.readString();
         this.accepter = parcel.readString();
     }
@@ -112,7 +112,7 @@ public class Task implements Parcelable {
         parcel.writeString(description);
         parcel.writeFloat(score);
         location.writeToParcel(parcel, 0);
-        //image.writeToParcel(parcel, 0);
+        image.writeToParcel(parcel, 0);
         parcel.writeString(creator);
         parcel.writeString(accepter);
     }
