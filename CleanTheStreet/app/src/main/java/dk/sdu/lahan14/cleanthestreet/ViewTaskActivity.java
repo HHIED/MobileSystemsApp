@@ -59,7 +59,7 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
         mIamgeView.setImageBitmap(mTask.getImage());
         mDescriptionTextView.setText(mTask.getDescription());
         calculateAndSetDistance();
-        mRatingBar.setRating(mTask.getRating());
+        mRatingBar.setRating(mTask.getScore());
         // TODO: identify self
         if (null != mTask.getAccepter()) {
             mAcceptTaskButton.setClickable(false);
@@ -75,7 +75,7 @@ public class ViewTaskActivity extends AppCompatActivity implements OnMapReadyCal
 
     public void onUpvote(View view) {
         mTask.incrementRating();
-        mRatingBar.setRating(mTask.getRating());
+        mRatingBar.setRating(mTask.getScore());
     }
 
     @Override

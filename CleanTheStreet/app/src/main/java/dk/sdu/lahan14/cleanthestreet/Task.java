@@ -14,15 +14,15 @@ public class Task {
     private int id;
     private Bitmap image;
     private String description;
-    private float rating;
+    private float score;
     private Location location;
     private final String creator;
     private String accepter;
 
-    public Task(Bitmap image, String description, int rating, Location location, String creator) {
+    public Task(Bitmap image, String description, int score, Location location, String creator) {
         this.image = image;
         this.description = description;
-        this.rating = rating;
+        this.score = score;
         this.location = location;
         this.creator = creator;
     }
@@ -51,16 +51,16 @@ public class Task {
         this.description = description;
     }
 
-    public float getRating() {
-        return rating;
+    public float getScore() {
+        return score;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public void incrementRating() {
-        rating += 1;
+        score += 1;
     }
 
     public Location getLocation() {
