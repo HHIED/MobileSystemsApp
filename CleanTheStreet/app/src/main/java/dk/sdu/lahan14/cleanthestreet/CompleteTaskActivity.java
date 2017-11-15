@@ -2,7 +2,6 @@ package dk.sdu.lahan14.cleanthestreet;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,17 +34,12 @@ public class CompleteTaskActivity extends BasicTaskActivity {
         mTaskImageView = findViewById(R.id.iv_complete_task_image);
         mCompletedImageView = findViewById(R.id.iv_completed_task_image);
         mDoneButton = findViewById(R.id.btn_done_task);
+        mDoneButton.setEnabled(false);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.f_complete_task_map);
         mapFragment.getMapAsync(this);
 
-
-        // TODO: get task
-        /* For testing */
-        Location location = new Location("this");
-        location.setLatitude(-33.852);
-        location.setLongitude(151.211);
-        mTask = new Task(null, "Something to clean up", 8, location, "Johny");
+        mTask = getIntent().getParcelableExtra(Task.class.toString());
 
         updateDisplayData();
     }
@@ -63,7 +57,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
 
         if (bitmap != null) {
             mCompletedImageView.setImageBitmap(bitmap);
-            mDoneButton.setClickable(true);
+            mDoneButton.setEnabled(true);
         }
     }
 

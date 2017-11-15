@@ -63,8 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onDoneTask"
-                    android:text="@string/btn_done_task"
-                    android:clickable="false" />
+                    android:text="@string/btn_done_task" />
 
                 <Button
                     android:id="@+id/btn_abandon_task"
