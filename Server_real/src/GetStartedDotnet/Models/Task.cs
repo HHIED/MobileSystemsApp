@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
 namespace GetStartedDotnet.Models
 {
@@ -13,9 +13,11 @@ namespace GetStartedDotnet.Models
         public string Description { get; set; }
         public string Image { get; set; }
         public int Score { get; set; }
-        public float Lattitude { get; set; }
-        public float Longtitude { get; set; }
 
+        public Task()
+        {
+
+        }
 
     }
 }

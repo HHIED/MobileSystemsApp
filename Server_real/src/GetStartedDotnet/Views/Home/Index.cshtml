@@ -24,7 +24,7 @@
             //POST request to API to create a new visitor entry in the database
             $.ajax({
                 method: "POST",
-                url: "/api/users/create/5",
+                url: "/api/visitors",
                 contentType: "application/json",
                 data: JSON.stringify({ name: name })
             })
@@ -37,7 +37,7 @@
 
     //Retreive all the visitors from the database
     function getNames() {
-        $.get("/api/users")
+        $.get("/api/visitors")
             .done(function (data) {
                 if (data.length > 0) {
                     $('#databaseNames').html("Database contents: " + JSON.stringify(data));

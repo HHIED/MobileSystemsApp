@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using GetStartedDotnet.Models;
-using System.Collections.Generic;
 
 namespace GetStartedDotnet.Migrations
 {
@@ -17,13 +16,13 @@ namespace GetStartedDotnet.Migrations
                 .HasAnnotation("ProductVersion", "1.1.3");
 
             modelBuilder.Entity("GetStartedDotnet.Models.User", b =>
-                {
-                    b.Property<int>("Id");
+            {
+                b.Property<int>("Id");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
+                b.ToTable("Users");
+            });
         }
     }
 }

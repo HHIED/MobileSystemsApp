@@ -13,6 +13,7 @@ namespace GetStartedDotnet.Controllers
     [Route("api/[controller]")]
     public class TasksController : Controller
     {
+
         private readonly HtmlEncoder _htmlEncoder;
         private readonly VisitorsDbContext _dbContext;
 
@@ -21,14 +22,35 @@ namespace GetStartedDotnet.Controllers
             _dbContext = dbContext;
             _htmlEncoder = htmlEncoder;
         }
-
+        // GET: /<controller>/
         [HttpGet]
-        public ActionResult GetAllTasks()
+        public ActionResult Get()
         {
-            List<Models.Task> tasks = _dbContext.Tasks.ToList();
-            return Json(tasks);
+            if (_dbContext == null)
+            {
+                return Json("No database");
+            }
+            else
+            {
+                return Json(_dbContext.Tasks.ToList());
+            }
         }
 
-
+        // POST api/values
+        [Route("/create")]
+        [HttpPost]
+        public ActionResult CreateUser([FromBody]Models.Task task)
+        {
+            if (_dbContext == null)
+            {
+                return Json("No database");
+            }
+            else
+            {
+                _dbContext.Tasks.Add(task);
+                _dbContext.SaveChanges();
+                return Json(task);
+            }
+        }
     }
 }

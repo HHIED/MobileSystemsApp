@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GetStartedDotnet.Models
 {
@@ -12,6 +15,11 @@ namespace GetStartedDotnet.Models
         public User(int Id)
         {
             this.Id = Id;
+        }
+
+        public User()
+        {
+
         }
     }
 }

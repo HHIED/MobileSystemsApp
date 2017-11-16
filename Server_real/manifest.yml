@@ -1,6 +1,6 @@
 ---
 applications:
-- name: MobileSystemServer
+- name: GetStartedDotnet
   random-route: true
   memory: 512M
   env:

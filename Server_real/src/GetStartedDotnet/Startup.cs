@@ -8,7 +8,6 @@ using System;
 using Newtonsoft.Json;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using MySQL.Data.EntityFrameworkCore.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -70,7 +69,7 @@ public class Startup
         if (!string.IsNullOrEmpty(databaseUri))
         {
             // add database context
-            services.AddDbContext<VisitorsDbContext>(options => options.UseMySQL(getConnectionString(databaseUri)));
+            services.AddDbContext<VisitorsDbContext>(options => options.UseMySql(getConnectionString(databaseUri)));
         }
         
         // Add framework services.
