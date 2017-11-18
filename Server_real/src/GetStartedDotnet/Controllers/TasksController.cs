@@ -37,7 +37,7 @@ namespace GetStartedDotnet.Controllers
         }
 
         // POST api/values
-        [Route("/create")]
+        [Route("create")]
         [HttpPost]
         public ActionResult CreateUser([FromBody]Models.Task task)
         {
@@ -51,6 +51,16 @@ namespace GetStartedDotnet.Controllers
                 _dbContext.SaveChanges();
                 return Json(task);
             }
+        }
+
+        [Route("IncreaseScore")]
+        [HttpPost]
+        public ActionResult IncreaseScore([FromBody]Models.Task task)
+        {
+            Models.Task dbTask = _dbContext.Tasks.Find(task.Id);
+            dbTask.Score++;
+            _dbContext.SaveChanges();
+            return Json(dbTask);
         }
     }
 }
