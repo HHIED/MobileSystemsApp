@@ -2,6 +2,7 @@ package dk.sdu.lahan14.cleanthestreet;
 
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -21,7 +22,16 @@ public class Task implements Parcelable {
     private final String creator;
     private String accepter;
 
-    public Task(int score, String description) {
+    public Task(int id) {
+        this.id = id;
+        this.creator = null;
+    }
+
+    public Task(int id, int score, String description, float latitude, float longitude) {
+        this.id = id;
+        this.location = new Location("");
+        this.location.setLatitude(latitude);
+        this.location.setLongitude(longitude);
         this.score = score;
         this.description = description;
         this.creator = null;

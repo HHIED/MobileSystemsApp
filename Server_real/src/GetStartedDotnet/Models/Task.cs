@@ -13,6 +13,8 @@ namespace GetStartedDotnet.Models
         public string Description { get; set; }
         public string Image { get; set; }
         public int Score { get; set; }
+        public float Lattitude { get; set; }
+        public float Longtitude { get; set; }
 
         public Task()
         {
