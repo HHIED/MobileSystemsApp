@@ -22,33 +22,33 @@ namespace GetStartedDotnet.Controllers
 
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult Get()
         {
             if (_dbContext == null)
             {
-                return new string[] { "sadasd" };
+                return Json("No database");
             }
             else
             {
-                return new string[] { _dbContext.Users.ToString() };
+                return Json(_dbContext.Users.ToList());
             }
         }
 
         // POST api/values
-        [Route("create/{Id}")]
-        [HttpPut("{Id}")]        
-        public string Post(int Id)
+        [Route("/create")]
+        [HttpPost]
+        public ActionResult CreateUser()
         {
             if (_dbContext == null)
             {
-                return "test";
+                return Json("No database");
             }
             else
             {
-                User user = new User(Id);
-                _dbContext.Users.Add(user);
+                User u = new User();
+                _dbContext.Users.Add(u);
                 _dbContext.SaveChanges();
-                return "test2";
+                return Json(u);
             }
         }
     }
