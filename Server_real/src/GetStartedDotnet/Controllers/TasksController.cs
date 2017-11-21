@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 using GetStartedDotnet.Models;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,14 +34,24 @@ namespace GetStartedDotnet.Controllers
             }
             else
             {
-                return Json(_dbContext.Tasks.ToList());
+                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").ToList();
+                foreach(Models.Task t in tasks)
+                {
+                    foreach(byte b in t.Image)
+                    Console.WriteLine(b);
+                }
+                JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
+                jsonSerializerSettings.TypeNameHandling = TypeNameHandling.Arrays;
+                JsonResult result = Json(tasks, jsonSerializerSettings);
+                return result;
             }
+            
         }
 
         // POST api/values
-        [Route("create")]
-        [HttpPost]
-        public ActionResult CreateUser([FromBody]Models.Task task)
+        [Route("create/{description}/{image}/{score}/{lattitude}/{longtitude}/{creatorId}/{accepterId}")]
+        [HttpPost("{description}/{image}/{score}/{lattitude}/{longtitude}/{creatorId}/{accepterId}")]
+        public ActionResult CreateTask(string description, byte[] image, int score, float lattitude, float longtitude, int creatorId, int accepterId)
         {
             if (_dbContext == null)
             {
@@ -47,6 +59,9 @@ namespace GetStartedDotnet.Controllers
             }
             else
             {
+                User creator = _dbContext.Users.Find(creatorId);
+                User accepter = _dbContext.Users.Find(accepterId);
+                Models.Task task = new Models.Task(description, image, score, lattitude, longtitude, creator, accepter);
                 _dbContext.Tasks.Add(task);
                 _dbContext.SaveChanges();
                 return Json(task);

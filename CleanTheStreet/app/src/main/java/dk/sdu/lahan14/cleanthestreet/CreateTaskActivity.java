@@ -8,6 +8,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.MapFragment;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
+
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class CreateTaskActivity extends BasicTaskActivity {
 
@@ -39,8 +49,25 @@ public class CreateTaskActivity extends BasicTaskActivity {
         }
     }
 
-    public void onSave(View view) {
+    public void onSave(View view) throws UnsupportedEncodingException {
         // TODO: send data to server
+        AsyncHttpClient client = new AsyncHttpClient();
+        UrlBuilder urlBuilder = new UrlBuilder();
+
+
+
+        Task taskDto = new Task(1, new User(1), new User(1),1,"test", mImageView.getDrawingCache(), 2, 3);
+        final RequestHandle handle2 = client.post(urlBuilder.createTaskUrl(taskDto.toDto()), null, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
 }

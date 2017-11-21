@@ -48,7 +48,7 @@ public class ViewTaskActivity extends BasicTaskActivity {
         Location location = new Location("this");
         location.setLatitude(-33.852);
         location.setLongitude(151.211);
-        mTask = new Task(null, "Something to clean up", 8, location, "Johny");
+        mTask = new Task(null, "Something to clean up", 8, location, new User(1));
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.f_view_task_map);
         mapFragment.getMapAsync(this);
@@ -58,13 +58,13 @@ public class ViewTaskActivity extends BasicTaskActivity {
     }
 
     private void updateDisplayData() {
-        mTaskCreatorTextView.setText(mTask.getCreator());
+        mTaskCreatorTextView.setText(mTask.getCreator().getId());
         mIamgeView.setImageBitmap(mTask.getImage());
         mDescriptionTextView.setText(mTask.getDescription());
         mRatingBar.setRating(mTask.getScore());
         calculateAndSetDistance();
-        // TODO: identify self
-        if (null != mTask.getAccepter()) {
+        // TODO: identify self - swap 1 for identity
+        if (1 != mTask.getAccepter().getId()) {
             mAcceptTaskButton.setClickable(false);
         } else {
             mAcceptTaskButton.setClickable(true);
@@ -109,8 +109,8 @@ public class ViewTaskActivity extends BasicTaskActivity {
     }
 
     public void onAcceptTask(View view) {
-        // TODO: identify self
-        mTask.setAccepter("Me");
+        // TODO: identify self - swap 1 for identity
+        mTask.setAccepter(new User(1));
         Intent completeActivityIntent = new Intent(this, CompleteTaskActivity.class);
         completeActivityIntent.putExtra(Task.class.toString(), mTask);
         startActivity(completeActivityIntent);

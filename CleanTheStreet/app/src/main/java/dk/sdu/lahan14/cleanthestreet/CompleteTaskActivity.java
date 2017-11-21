@@ -45,7 +45,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     }
 
     private void updateDisplayData() {
-        mCreatorTextView.setText(mTask.getCreator());
+        mCreatorTextView.setText(mTask.getCreator().getId());
         mDescriptionTextView.setText(mTask.getDescription());
         mRatingBar.setRating(mTask.getScore());
         mTaskImageView.setImageBitmap(mTask.getImage());
@@ -67,7 +67,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     }
 
     public void onAbandonTask(View view) {
-        mTask.setAccepter(null);
+        mTask.setAccepter(new User(1));
         // TODO: send to server
         finish();
     }

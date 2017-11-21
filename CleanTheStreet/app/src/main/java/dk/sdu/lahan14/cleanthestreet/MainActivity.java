@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void viewTasksClick(View view ){
-        Intent intent = new Intent(this, ViewTasksActivity.class);
+        Intent intent = new Intent(this, CreateTaskActivity.class);
         startActivity(intent);
     }
 

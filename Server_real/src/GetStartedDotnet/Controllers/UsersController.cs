@@ -35,7 +35,7 @@ namespace GetStartedDotnet.Controllers
         }
 
         // POST api/values
-        [Route("/create")]
+        [Route("create")]
         [HttpPost]
         public ActionResult CreateUser()
         {
@@ -45,7 +45,7 @@ namespace GetStartedDotnet.Controllers
             }
             else
             {
-                User u = new User();
+                User u = new User("John");
                 _dbContext.Users.Add(u);
                 _dbContext.SaveChanges();
                 return Json(u);

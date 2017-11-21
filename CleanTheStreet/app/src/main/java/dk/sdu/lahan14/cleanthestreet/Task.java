@@ -17,27 +17,28 @@ public class Task implements Parcelable {
     private int id;
     private Bitmap image;
     private String description;
-    private float score;
+    private int score;
     private Location location;
-    private final String creator;
-    private String accepter;
+    private final User creator;
+    private User accepter;
 
     public Task(int id) {
         this.id = id;
         this.creator = null;
     }
 
-    public Task(int id, int score, String description, float latitude, float longitude) {
+    public Task(int id, User creator, User accepter, int score, String description, Bitmap image, float latitude, float longitude) {
         this.id = id;
         this.location = new Location("");
         this.location.setLatitude(latitude);
         this.location.setLongitude(longitude);
         this.score = score;
         this.description = description;
-        this.creator = null;
+        this.accepter = accepter;
+        this.creator = creator;
     }
 
-    public Task(Bitmap image, String description, int score, Location location, String creator) {
+    public Task(Bitmap image, String description, int score, Location location, User creator) {
         this.image = image;
         this.description = description;
         this.score = score;
@@ -48,11 +49,11 @@ public class Task implements Parcelable {
     public Task(Parcel parcel) {
         this.id = parcel.readInt();
         this.description = parcel.readString();
-        this.score = parcel.readFloat();
+        this.score = parcel.readInt();
         this.location = Location.CREATOR.createFromParcel(parcel);
         this.image = Bitmap.CREATOR.createFromParcel(parcel);
-        this.creator = parcel.readString();
-        this.accepter = parcel.readString();
+        this.creator = new User(parcel.readInt());
+        this.accepter = new User(parcel.readInt());
     }
 
     public int getId() {
@@ -99,15 +100,15 @@ public class Task implements Parcelable {
         this.location = location;
     }
 
-    public String getCreator() {
+    public User getCreator() {
         return creator;
     }
 
-    public String getAccepter() {
+    public User getAccepter() {
         return accepter;
     }
 
-    public void setAccepter(String accepter) {
+    public void setAccepter(User accepter) {
         this.accepter = accepter;
     }
 
@@ -123,8 +124,8 @@ public class Task implements Parcelable {
         parcel.writeFloat(score);
         location.writeToParcel(parcel, 0);
         image.writeToParcel(parcel, 0);
-        parcel.writeString(creator);
-        parcel.writeString(accepter);
+        parcel.writeInt(creator.getId());
+        parcel.writeInt(accepter.getId());
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
@@ -139,4 +140,10 @@ public class Task implements Parcelable {
             return new Task[i];
         }
     };
+
+    public TaskDto toDto() {
+        byte[] byteImage = BitMapConverter.getBytes(this.image);
+        TaskDto dto = new TaskDto(this.id, this.creator, this.accepter, byteImage, this.description, this.score, (float) this.location.getLatitude(), (float)this.location.getLongitude());
+        return dto;
+    }
 }

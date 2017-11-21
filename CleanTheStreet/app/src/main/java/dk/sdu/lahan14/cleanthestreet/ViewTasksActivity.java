@@ -1,10 +1,11 @@
 package dk.sdu.lahan14.cleanthestreet;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.JsonReader;
-import android.util.Log;
+import android.util.*;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,12 +14,16 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.*;
+import com.loopj.android.http.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.io.File;
 
 import java.io.Console;
 import java.io.UnsupportedEncodingException;
@@ -31,10 +36,12 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class ViewTasksActivity extends AppCompatActivity {
 
-    private  AsyncHttpClient client;
-    private  Gson gson;
+    private AsyncHttpClient client;
+    private Gson gson;
     private ImageButton upvoteButton;
+    private UrlBuilder urlBuilder;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +49,16 @@ public class ViewTasksActivity extends AppCompatActivity {
         upvoteButton = (ImageButton) findViewById(R.id.imageButton);
         client = new AsyncHttpClient();
         gson = new Gson();
-        getTasks();
-
+        urlBuilder = new UrlBuilder();
+        try {
+            upvoteTask(1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void upvoteClick(View view) throws UnsupportedEncodingException {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void upvoteClick(View view) throws IOException {
         int i = (int) view.getTag(R.id.upvoteId);
         upvoteTask(i);
     }
@@ -62,40 +74,35 @@ public class ViewTasksActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 // called when response HTTP status is "200 OK"
+
+                String json = null;
                 try {
-                    String json = new String(response, "UTF-8");
-                    JSONArray jsonArray = new JSONArray(json);
-                    ArrayList< Task> tasks = new ArrayList();
-                    for(int i=0; i<jsonArray.length(); i++) {
-                        try {
-                            JSONObject task = jsonArray.getJSONObject(i);
-                            int score = task.getInt("score");
-                            String description = task.getString("description");
-                            int id = task.getInt("id");
-                            float latitude = (float) task.getDouble("lattitude");
-                            float longitude = (float) task.getDouble("longtitude");
-
-                            Task taskObject = new Task(id, score, description, latitude, longitude);
-                            tasks.add(taskObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    ListView customListView = (ListView) findViewById(R.id.tasksListView);
-                    // get data from the table by the ListAdapter
-                    //ArrayAdapter customAdapter = new ArrayAdapter(ViewTasksActivity.this, android.R.layout.simple_list_item_1, tasks);
-                    TaskAdapter customAdapter = new TaskAdapter(ViewTasksActivity.this, R.layout.task_view, tasks);
-
-                    customListView.setAdapter(customAdapter);
-
+                    json = new String(response, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
+                }
+                JSONObject jsonArray = null;
+                try {
+                    jsonArray = new JSONObject(json);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                ArrayList<Task> tasks = new ArrayList();
 
+                        TaskDto task = gson.fromJson(jsonArray.toString(), TaskDto.class);
+
+
+                        TaskDto taskObject = task;
+                        tasks.add(taskObject.toTask());
+
+                        ListView customListView = (ListView) findViewById(R.id.tasksListView);
+                        // get data from the table by the ListAdapter
+                        //ArrayAdapter customAdapter = new ArrayAdapter(ViewTasksActivity.this, android.R.layout.simple_list_item_1, tasks);
+                        TaskAdapter customAdapter = new TaskAdapter(ViewTasksActivity.this, R.layout.task_view, tasks);
+
+                        customListView.setAdapter(customAdapter);
             }
+
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
@@ -107,17 +114,26 @@ public class ViewTasksActivity extends AppCompatActivity {
                 // called when request is retried
             }
         });
+
     }
 
-    private void upvoteTask(int taskId) throws UnsupportedEncodingException {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void upvoteTask(int taskId) throws IOException {
         TaskDto task = new TaskDto(taskId);
 
         String jsonTask = gson.toJson(task);
         StringEntity entity = new StringEntity(jsonTask);
-        final RequestHandle handle = client.post(ViewTasksActivity.this, "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/IncreaseScore", entity, "application/json", new AsyncHttpResponseHandler() {
+        byte[] image = android.util.Base64.decode("E04FD020ea3a6910a2d808002b30309d", android.util.Base64.URL_SAFE);
+
+
+        File fi = new File("IMG_20171117_171116_01.jpg");
+        byte[] fileContent = Files.readAllBytes(fi.toPath());
+
+        TaskDto taskDto = new TaskDto(1, new User(1), new User(1), fileContent, "test", 1, 2, 3);
+        final RequestHandle handle2 = client.post(urlBuilder.createTaskUrl(taskDto), null, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                getTasks();
+
             }
 
             @Override
