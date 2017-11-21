@@ -1,10 +1,11 @@
 package dk.sdu.lahan14.cleanthestreet;
 
 import android.graphics.Bitmap;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Basic object of a Task.
@@ -17,8 +18,9 @@ public class Task implements Parcelable {
     private int id;
     private Bitmap image;
     private String description;
-    private float score;
-    private Location location;
+    private int score;
+    private double latitude;
+    private double longitude;
     private final String creator;
     private String accepter;
 
@@ -27,29 +29,41 @@ public class Task implements Parcelable {
         this.creator = null;
     }
 
-    public Task(int id, int score, String description, float latitude, float longitude) {
+    public Task(int id, int score, String description, double latitude, double longitude) {
         this.id = id;
-        this.location = new Location("");
-        this.location.setLatitude(latitude);
-        this.location.setLongitude(longitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.score = score;
         this.description = description;
         this.creator = null;
     }
 
-    public Task(Bitmap image, String description, int score, Location location, String creator) {
+    public Task(Bitmap image, String description, int score, double latitude, double longitude, String creator) {
         this.image = image;
         this.description = description;
         this.score = score;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.creator = creator;
+    }
+
+    public Task(int id, Bitmap image, String description, int score, double latitude, double longitude, String creator, String accepter) {
+        this.id = id;
+        this.image = image;
+        this.description = description;
+        this.score = score;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.creator = creator;
+        this.accepter = accepter;
     }
 
     public Task(Parcel parcel) {
         this.id = parcel.readInt();
         this.description = parcel.readString();
-        this.score = parcel.readFloat();
-        this.location = Location.CREATOR.createFromParcel(parcel);
+        this.score = parcel.readInt();
+        this.latitude = parcel.readDouble();
+        this.longitude = parcel.readDouble();
         this.image = Bitmap.CREATOR.createFromParcel(parcel);
         this.creator = parcel.readString();
         this.accepter = parcel.readString();
@@ -91,12 +105,20 @@ public class Task implements Parcelable {
         score += 1;
     }
 
-    public Location getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getCreator() {
@@ -120,8 +142,9 @@ public class Task implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(description);
-        parcel.writeFloat(score);
-        location.writeToParcel(parcel, 0);
+        parcel.writeInt(score);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
         image.writeToParcel(parcel, 0);
         parcel.writeString(creator);
         parcel.writeString(accepter);
@@ -139,4 +162,39 @@ public class Task implements Parcelable {
             return new Task[i];
         }
     };
+
+    public JSONObject getTaskAsJSONObject() {
+        JSONObject jsonTask = new JSONObject();
+        try {
+            jsonTask.put(Constants.ID, id);
+            jsonTask.put(Constants.IMAGE, image);
+            jsonTask.put(Constants.DESCRIPTION, description);
+            jsonTask.put(Constants.SCORE, score);
+            jsonTask.put(Constants.LATITUDE, latitude);
+            jsonTask.put(Constants.LONGITUDE, longitude);
+            jsonTask.put(Constants.CREATOR, creator);
+            jsonTask.put(Constants.ACCEPTER, accepter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonTask;
+    }
+
+    public static Task getTaskFromJSON(JSONObject json) {
+        // TODO: consider getting null for properties. Null property || null task ??
+        try {
+            int id = json.getInt(Constants.ID);
+            Bitmap image = (Bitmap) json.get(Constants.IMAGE);
+            String description = json.getString(Constants.DESCRIPTION);
+            int score = json.getInt(Constants.SCORE);
+            double latitude = json.getDouble(Constants.LATITUDE);
+            double longitude = json.getDouble(Constants.LONGITUDE);
+            String creator = json.getString(Constants.CREATOR);
+            String accepter = json.getString(Constants.ACCEPTER);
+            return new Task(id, image, description, score, latitude, longitude, creator, accepter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
