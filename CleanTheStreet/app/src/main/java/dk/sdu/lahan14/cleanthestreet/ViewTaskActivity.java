@@ -45,10 +45,7 @@ public class ViewTaskActivity extends BasicTaskActivity {
 
         // TODO: get task
         /* For testing */
-        Location location = new Location("this");
-        location.setLatitude(-33.852);
-        location.setLongitude(151.211);
-        mTask = new Task(null, "Something to clean up", 8, location, "Johny");
+        mTask = new Task(null, "Something to clean up", 8, -33.852, 151.211, "Johny");
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.f_view_task_map);
         mapFragment.getMapAsync(this);
@@ -78,7 +75,10 @@ public class ViewTaskActivity extends BasicTaskActivity {
                 if (task.isSuccessful()) {
                     Location deviceLocation = (Location) task.getResult();
                     if (deviceLocation != null) {
-                        float distanceInMeters = deviceLocation.distanceTo(mTask.getLocation());
+                        Location taskLocation = new Location("");
+                        taskLocation.setLatitude(mTask.getLatitude());
+                        taskLocation.setLongitude(mTask.getLongitude());
+                        float distanceInMeters = deviceLocation.distanceTo(taskLocation);
                         if (distanceInMeters > 1000) {
                             mDistanceTextView.setText(String.format("%.2f km", distanceInMeters / 1000.0 ));
                         } else {
@@ -100,7 +100,7 @@ public class ViewTaskActivity extends BasicTaskActivity {
         try {
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-            LatLng latLng = new LatLng(mTask.getLocation().getLatitude(), mTask.getLocation().getLongitude());
+            LatLng latLng = new LatLng(mTask.getLatitude(), mTask.getLongitude());
             googleMap.addMarker(new MarkerOptions().position(latLng));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         } catch (SecurityException se) {
