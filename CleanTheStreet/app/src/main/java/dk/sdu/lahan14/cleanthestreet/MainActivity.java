@@ -38,12 +38,16 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
         SQLiteDatabase db_out = databaseHelper.getReadableDatabase();
+        String[] projection = {
+                UserEntry._ID,
+                UserEntry.COLUMN_USER_ID,
+        };
 
-        SQLiteStatement s = db_out.compileStatement("SELECT * FROM sqlite_master WHERE name ='" + UserEntry.TABLE_NAME + "' and type='table'");
-        long count = s.simpleQueryForLong();
-
-        if(count <= 0) {
-            client.post("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/api/users/create", new AsyncHttpResponseHandler() {
+        SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
+        Cursor query = db_out.query(UserEntry.TABLE_NAME, projection, null, null, null, null, null, null);
+        boolean empty = query.moveToNext();
+        if(!empty) {
+            client.post("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/users/create", new AsyncHttpResponseHandler() {
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
                 @Override
