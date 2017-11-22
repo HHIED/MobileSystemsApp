@@ -22,9 +22,10 @@
             $('#nameInput').hide();
             $('#response').html("loading...");
             //POST request to API to create a new visitor entry in the database
+            
             $.ajax({
                 method: "POST",
-                url: "/api/visitors",
+                url: "/api/tasks/create",
                 contentType: "application/json",
                 data: JSON.stringify({ name: name })
             })
