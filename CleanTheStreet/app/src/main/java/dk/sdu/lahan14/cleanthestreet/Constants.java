@@ -10,6 +10,8 @@ public class Constants {
 
     public static final int CAMERA_IMAGE_REQUEST_CODE = 1;
 
+    public static final int PERMISSIONS_REQUEST_LOCATION = 2;
+
     public static final String ID = "id";
 
     public static final String IMAGE = "image";
