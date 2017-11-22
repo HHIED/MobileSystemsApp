@@ -6,12 +6,12 @@ package dk.sdu.lahan14.cleanthestreet;
 
 public class TaskDto {
 
-    private int id;
-    private String image;
-    private String description;
-    private int score;
-    private float lattitude;
-    private float longtitude;
+    public int id;
+    public String image;
+    public String description;
+    public int score;
+    public float lattitude;
+    public float longtitude;
 
     public TaskDto(int id, String image, String description, int score, float lattitude, float longtitude) {
         this.id = id;

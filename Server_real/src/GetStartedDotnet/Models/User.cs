@@ -10,11 +10,16 @@ namespace GetStartedDotnet.Models
     {
         [Key]
         public int Id { get; set; }
-
+        public string Name { get; set; }
 
         public User(int Id)
         {
             this.Id = Id;
+        }
+
+        public User(string name)
+        {
+            Name = name;
         }
 
         public User()
