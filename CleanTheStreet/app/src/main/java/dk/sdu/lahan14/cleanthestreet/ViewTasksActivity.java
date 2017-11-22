@@ -3,8 +3,8 @@ package dk.sdu.lahan14.cleanthestreet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.JsonReader;
-import android.util.Log;
+import android.util.*;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,12 +43,38 @@ public class ViewTasksActivity extends AppCompatActivity {
         client = new AsyncHttpClient();
         gson = new Gson();
         getTasks();
+     //   try {
+     //       createTask();
+      //  } catch (UnsupportedEncodingException e) {
+       //     e.printStackTrace();
+       // }
+       //   getTasks();
 
     }
 
     public void upvoteClick(View view) throws UnsupportedEncodingException {
         int i = (int) view.getTag(R.id.upvoteId);
         upvoteTask(i);
+    }
+
+    private void createTask() throws UnsupportedEncodingException {
+        byte[] image = android.util.Base64.decode(getString(R.string.image_test), Base64.NO_WRAP);
+        TaskDto task = new TaskDto(1, getString(R.string.image_test), "des", 1, 55.5f, 55.2f);
+        String jsonTask = gson.toJson(task);
+        StringEntity entity = new StringEntity(jsonTask);
+        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/create/1/1";
+
+        final RequestHandle handle = client.post(ViewTasksActivity.this, url, entity, "application/json",  new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            //    getTasks();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
     public void getTasks() {
@@ -64,23 +90,26 @@ public class ViewTasksActivity extends AppCompatActivity {
                 // called when response HTTP status is "200 OK"
                 try {
                     String json = new String(response, "UTF-8");
-                    JSONArray jsonArray = new JSONArray(json);
+                    JSONObject jsonObject = new JSONObject(json);
                     ArrayList< Task> tasks = new ArrayList();
-                    for(int i=0; i<jsonArray.length(); i++) {
+
                         try {
-                            JSONObject task = jsonArray.getJSONObject(i);
-                            int score = task.getInt("score");
-                            String description = task.getString("description");
-                            int id = task.getInt("id");
-                            float latitude = (float) task.getDouble("lattitude");
-                            float longitude = (float) task.getDouble("longtitude");
+                            JSONArray array = jsonObject.getJSONArray("$values");
+                            JSONObject task = array.getJSONObject(0);
+                            int score = task.getInt("Score");
+                            String description = task.getString("Description");
+                            int id = task.getInt("Id");
+                            float latitude = (float) task.getDouble("Lattitude");
+                            float longitude = (float) task.getDouble("Longtitude");
+                            String imageString = (String) task.getString("Image");
+                            byte[] image = Base64.decode(imageString, Base64.NO_WRAP);
 
                             Task taskObject = new Task(id, score, description, latitude, longitude);
                             tasks.add(taskObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }
+
 
                     ListView customListView = (ListView) findViewById(R.id.tasksListView);
                     // get data from the table by the ListAdapter
