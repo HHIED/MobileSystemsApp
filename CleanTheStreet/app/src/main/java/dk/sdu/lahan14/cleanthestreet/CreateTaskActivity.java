@@ -52,8 +52,8 @@ public class CreateTaskActivity extends BasicTaskActivity {
         }
     }
 
-    public void onSave(View view) {
-
+    public void onSave(View view) throws UnsupportedEncodingException {
+        createTask();
 
 
 
