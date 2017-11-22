@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         long count = s.simpleQueryForLong();
 
         if(count <= 0) {
-            client.post("http://getstarteddotnet-disjunctive-petulance.eu-gb.mybluemix.net/api/users/create", new AsyncHttpResponseHandler() {
+            client.post("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/api/users/create", new AsyncHttpResponseHandler() {
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
                 @Override
