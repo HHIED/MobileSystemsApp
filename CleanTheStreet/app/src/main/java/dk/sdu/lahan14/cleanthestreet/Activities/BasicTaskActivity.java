@@ -75,12 +75,16 @@ public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void getImageFromGallery() {
         Intent getPicureFromGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        ((Activity) context).startActivityForResult(getPicureFromGalleryIntent, Constants.GALLERY_IMAGE_REQUEST_CODE);
+        if (getPicureFromGalleryIntent.resolveActivity(getPackageManager()) != null) {
+            ((Activity) context).startActivityForResult(getPicureFromGalleryIntent, Constants.GALLERY_IMAGE_REQUEST_CODE);
+        }
     }
 
     private void getImageFromCamera() {
         Intent takePictueIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        ((Activity) context).startActivityForResult(takePictueIntent, Constants.CAMERA_IMAGE_REQUEST_CODE);
+        if (takePictueIntent.resolveActivity(getPackageManager()) != null) {
+            ((Activity) context).startActivityForResult(takePictueIntent, Constants.CAMERA_IMAGE_REQUEST_CODE);
+        }
     }
 
     protected Bitmap retrieveBitmap(int requestCode, int resultCode, Intent data) {
