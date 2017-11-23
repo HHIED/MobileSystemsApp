@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,9 +25,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.concurrent.Executor;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -125,17 +129,21 @@ public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCa
 
     protected void setDeviceLocationOnMap() {
         Task locationResult = getLastLocation();
-        locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    mLastKnownLocation = (Location) task.getResult();
-                    LatLng latLng = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(latLng));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        if (locationResult != null) {
+            locationResult.addOnCompleteListener(this, new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if (task.isSuccessful()) {
+                        mLastKnownLocation = (Location) task.getResult();
+                        if (mLastKnownLocation != null) {
+                            LatLng latLng = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                            mMap.addMarker(new MarkerOptions().position(latLng));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                        }
+                    }
                 }
-            }
             });
+        }
     }
 
     protected Task getLastLocation() {
@@ -153,7 +161,7 @@ public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCa
             case Constants.PERMISSIONS_REQUEST_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     updateLocationUI();
-                    getLastLocation();
+                    setDeviceLocationOnMap();
                 }
         }
     }

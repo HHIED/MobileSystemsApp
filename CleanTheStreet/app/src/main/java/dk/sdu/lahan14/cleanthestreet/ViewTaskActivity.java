@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,8 +27,9 @@ public class ViewTaskActivity extends BasicTaskActivity {
     private TextView mTaskCreatorTextView;
     private ImageView mIamgeView;
     private TextView mDescriptionTextView;
+    private ImageButton mUpvoteImageButton;
     private TextView mDistanceTextView;
-    private RatingBar mRatingBar;
+    private TextView mScoreTextView;
     private Button mAcceptTaskButton;
 
     @Override
@@ -39,8 +40,9 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mTaskCreatorTextView = findViewById(R.id.tv_task_creator);
         mIamgeView = findViewById(R.id.iv_view_task_image);
         mDescriptionTextView = findViewById(R.id.tv_view_task_description);
+        mUpvoteImageButton = findViewById(R.id.ib_view_task_upvote);
         mDistanceTextView = findViewById(R.id.tv_view_task_distance);
-        mRatingBar = findViewById(R.id.rb_view_task_rating);
+        mScoreTextView = findViewById(R.id.tv_view_task_score_value);
         mAcceptTaskButton = findViewById(R.id.btn_accept_task);
 
         // TODO: get task
@@ -58,9 +60,11 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mTaskCreatorTextView.setText(mTask.getCreator());
         mIamgeView.setImageBitmap(mTask.getImage());
         mDescriptionTextView.setText(mTask.getDescription());
-        mRatingBar.setRating(mTask.getScore());
+        mScoreTextView.setText(mTask.getScore());
         calculateAndSetDistance();
         // TODO: identify self
+        // TODO: disable upvote button for self
+        // TODO: keep track of upvoted tasks??
         if (null != mTask.getAccepter()) {
             mAcceptTaskButton.setClickable(false);
         } else {
@@ -91,8 +95,9 @@ public class ViewTaskActivity extends BasicTaskActivity {
     }
 
     public void onUpvote(View view) {
-        mTask.incrementRating();
-        mRatingBar.setRating(mTask.getScore());
+        mTask.incrementScore();
+        mUpvoteImageButton.setClickable(false);
+        mScoreTextView.setText(mTask.getScore());
     }
 
     @Override

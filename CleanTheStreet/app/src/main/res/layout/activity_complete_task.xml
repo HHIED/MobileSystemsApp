@@ -22,11 +22,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <RatingBar
-            android:id="@+id/rb_complete_task_rating"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:isIndicator="true" />
+            android:layout_height="wrap_content">
+            <TableRow>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22dp"
+                    android:text="@string/tv_task_score_text" />
+
+                <TextView
+                    android:id="@+id/tv_complete_task_score_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22dp"
+                    android:text="@string/tv_task_score_value" />
+            </TableRow>
+        </TableLayout>
 
         <fragment
             android:id="@+id/f_complete_task_map"

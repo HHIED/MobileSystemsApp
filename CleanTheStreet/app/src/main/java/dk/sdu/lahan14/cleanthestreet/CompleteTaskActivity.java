@@ -16,7 +16,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     private Task mTask;
     private TextView mCreatorTextView;
     private TextView mDescriptionTextView;
-    private RatingBar mRatingBar;
+    private TextView mScoreTextView;
     private ImageView mTaskImageView;
     private ImageView mCompletedImageView;
     private Button mDoneButton;
@@ -30,7 +30,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
 
         mCreatorTextView = findViewById(R.id.tv_complete_task_creator);
         mDescriptionTextView = findViewById(R.id.tv_complete_task_description);
-        mRatingBar = findViewById(R.id.rb_complete_task_rating);
+        mScoreTextView = findViewById(R.id.tv_complete_task_score_value);
         mTaskImageView = findViewById(R.id.iv_complete_task_image);
         mCompletedImageView = findViewById(R.id.iv_completed_task_image);
         mDoneButton = findViewById(R.id.btn_done_task);
@@ -47,7 +47,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     private void updateDisplayData() {
         mCreatorTextView.setText(mTask.getCreator());
         mDescriptionTextView.setText(mTask.getDescription());
-        mRatingBar.setRating(mTask.getScore());
+        mScoreTextView.setText(mTask.getScore());
         mTaskImageView.setImageBitmap(mTask.getImage());
     }
 

@@ -93,7 +93,7 @@ public class Task implements Parcelable {
         this.description = description;
     }
 
-    public float getScore() {
+    public int getScore() {
         return score;
     }
 
@@ -101,7 +101,7 @@ public class Task implements Parcelable {
         this.score = score;
     }
 
-    public void incrementRating() {
+    public void incrementScore() {
         score += 1;
     }
 
