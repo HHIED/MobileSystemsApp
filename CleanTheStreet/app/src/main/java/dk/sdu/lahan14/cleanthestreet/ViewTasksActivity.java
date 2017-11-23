@@ -57,25 +57,7 @@ public class ViewTasksActivity extends AppCompatActivity {
         upvoteTask(i);
     }
 
-    private void createTask() throws UnsupportedEncodingException {
-        byte[] image = android.util.Base64.decode(getString(R.string.image_test), Base64.NO_WRAP);
-        TaskDto task = new TaskDto(1, getString(R.string.image_test), "des", 1, 55.5f, 55.2f);
-        String jsonTask = gson.toJson(task);
-        StringEntity entity = new StringEntity(jsonTask);
-        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/create/1/1";
 
-        final RequestHandle handle = client.post(ViewTasksActivity.this, url, entity, "application/json",  new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-            //    getTasks();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-            }
-        });
-    }
 
     public void getTasks() {
         final RequestHandle requestHandle = client.get("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks", new AsyncHttpResponseHandler() {

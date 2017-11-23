@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,15 +22,18 @@ import dk.sdu.lahan14.cleanthestreet.Database.UserEntry;
 
 public class MainActivity extends AppCompatActivity {
     private AsyncHttpClient client;
+    private Button viewtasksButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        viewtasksButton = (Button) findViewById(R.id.viewTasksBtn);
         setContentView(R.layout.activity_view_tasks);
         client = new AsyncHttpClient();
+        Intent intent = new Intent(this, CreateTaskActivity.class);
+        startActivity(intent);
 
         createUser();
     }
@@ -38,12 +42,16 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
         SQLiteDatabase db_out = databaseHelper.getReadableDatabase();
+        String[] projection = {
+                UserEntry._ID,
+                UserEntry.COLUMN_USER_ID,
+        };
 
-        SQLiteStatement s = db_out.compileStatement("SELECT * FROM sqlite_master WHERE name ='" + UserEntry.TABLE_NAME + "' and type='table'");
-        long count = s.simpleQueryForLong();
-
-        if(count <= 0) {
-            client.post("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/api/users/create", new AsyncHttpResponseHandler() {
+        SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
+        Cursor query = db_out.query(UserEntry.TABLE_NAME, projection, null, null, null, null, null, null);
+        boolean empty = query.moveToNext();
+        if(!empty) {
+            client.post("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/users/create", new AsyncHttpResponseHandler() {
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
                 @Override
@@ -86,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void viewTasksClick(View view ){
-        Intent intent = new Intent(this, ViewTasksActivity.class);
+        Intent intent = new Intent(this, CreateTaskActivity.class);
         startActivity(intent);
     }
 

@@ -49,9 +49,9 @@ namespace GetStartedDotnet.Controllers
         }
 
         // POST api/values
-        [Route("create/{creatorId}/{accepterId}")]
-        [HttpPost("{creatorId}/{accepterId}")]
-        public ActionResult CreateTask([FromBody] TaskMinimal taskMin, int creatorId, int accepterId)
+        [Route("create/{creatorId}")]
+        [HttpPost("{creatorId}")]
+        public ActionResult CreateTask([FromBody] TaskMinimal taskMin, int creatorId)
         {
             if (_dbContext == null)
             {
@@ -61,7 +61,7 @@ namespace GetStartedDotnet.Controllers
             {
                 
                 User creator = _dbContext.Users.Find(creatorId);
-                User accepter = _dbContext.Users.Find(accepterId);
+                User accepter = null;
                 Models.Task task = new Models.Task(taskMin.Description, taskMin.Image, taskMin.Score, taskMin.Lattitude, taskMin.Longtitude, creator, accepter);
                 _dbContext.Tasks.Add(task);
                 _dbContext.SaveChanges();
