@@ -22,7 +22,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC3zq_sSORO61eUPoaU6FYwVCrH1n7xU20" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,15 +30,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateTaskActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.CreateTaskActivity"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".ViewTaskActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activities.ViewTaskActivity"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:name=".CompleteTaskActivity"
-            android:parentActivityName=".ViewTaskActivity" />
-        <activity android:name=".ViewTasksActivity"></activity>
+            android:name=".Activities.CompleteTaskActivity"
+            android:parentActivityName=".Activities.ViewTaskActivity" />
+        <activity android:name=".Activities.ViewTasksActivity"></activity>
     </application>
 
 </manifest>

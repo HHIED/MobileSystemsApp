@@ -1,21 +1,23 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Network;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
 
+import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Util.Task;
+
 /**
  * Created by lasse on 15-11-2017.
  */
 
-public class TaskAdapter extends ArrayAdapter<dk.sdu.lahan14.cleanthestreet.Task>{
+public class TaskAdapter extends ArrayAdapter<Task>{
 
     public TaskAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);

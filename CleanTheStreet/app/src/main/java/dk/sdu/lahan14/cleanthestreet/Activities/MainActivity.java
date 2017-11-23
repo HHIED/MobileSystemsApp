@@ -1,10 +1,9 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,12 +12,14 @@ import android.widget.Button;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.SyncHttpClient;
 
 import java.io.UnsupportedEncodingException;
 
 import cz.msebera.android.httpclient.Header;
-import dk.sdu.lahan14.cleanthestreet.Database.UserEntry;
+import dk.sdu.lahan14.cleanthestreet.Database.Database.UserEntry;
+import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
+import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Util.User;
 
 public class MainActivity extends AppCompatActivity {
     private AsyncHttpClient client;

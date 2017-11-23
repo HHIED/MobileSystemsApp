@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="dk.sdu.lahan14.cleanthestreet.CreateTaskActivity">
+    tools:context="dk.sdu.lahan14.cleanthestreet.Activities.CreateTaskActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

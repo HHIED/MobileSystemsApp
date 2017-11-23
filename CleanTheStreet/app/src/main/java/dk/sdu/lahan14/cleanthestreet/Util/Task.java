@@ -1,4 +1,4 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Util;
 
 import android.graphics.Bitmap;
 import android.os.Parcel;

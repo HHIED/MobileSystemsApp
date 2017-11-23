@@ -1,4 +1,4 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Network;
 
 /**
  * Created by lasse on 18-11-2017.

@@ -1,4 +1,4 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Network;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

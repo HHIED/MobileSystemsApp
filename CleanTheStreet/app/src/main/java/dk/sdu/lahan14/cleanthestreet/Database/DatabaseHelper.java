@@ -1,10 +1,8 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import dk.sdu.lahan14.cleanthestreet.Database;
 
 /**
  * Created by Simon-PC on 21-11-2017.

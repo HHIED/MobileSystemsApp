@@ -1,13 +1,10 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.*;
 import android.util.Base64;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -17,16 +14,17 @@ import com.loopj.android.http.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 
-import java.io.Console;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
-import cz.msebera.android.httpclient.util.EntityUtils;
+import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Util.Task;
+import dk.sdu.lahan14.cleanthestreet.Network.TaskAdapter;
+import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 
 
 public class ViewTasksActivity extends AppCompatActivity {
@@ -73,7 +71,7 @@ public class ViewTasksActivity extends AppCompatActivity {
                 try {
                     String json = new String(response, "UTF-8");
                     JSONObject jsonObject = new JSONObject(json);
-                    ArrayList< Task> tasks = new ArrayList();
+                    ArrayList<Task> tasks = new ArrayList();
 
                         try {
                             JSONArray array = jsonObject.getJSONArray("$values");

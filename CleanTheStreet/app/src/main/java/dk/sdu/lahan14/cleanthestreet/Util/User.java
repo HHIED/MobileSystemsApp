@@ -1,4 +1,4 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Util;
 
 /**
  * Created by Simon-PC on 21-11-2017.

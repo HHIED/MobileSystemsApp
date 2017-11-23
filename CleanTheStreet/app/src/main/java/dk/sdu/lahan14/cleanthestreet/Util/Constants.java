@@ -1,4 +1,4 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Util;
 
 /**
  * Created by Arpad on 11/12/2017.

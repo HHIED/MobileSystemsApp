@@ -1,4 +1,4 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

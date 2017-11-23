@@ -1,4 +1,4 @@
-package dk.sdu.lahan14.cleanthestreet;
+package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +19,9 @@ import java.io.UnsupportedEncodingException;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import dk.sdu.lahan14.cleanthestreet.Network.BitMapConverter;
+import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 
 public class CreateTaskActivity extends BasicTaskActivity {
 
