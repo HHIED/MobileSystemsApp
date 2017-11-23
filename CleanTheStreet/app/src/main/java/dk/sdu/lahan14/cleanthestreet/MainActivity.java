@@ -29,11 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewtasksButton = (Button) findViewById(R.id.viewTasksBtn);
-        setContentView(R.layout.activity_view_tasks);
         client = new AsyncHttpClient();
-        Intent intent = new Intent(this, CreateTaskActivity.class);
-        startActivity(intent);
 
         createUser();
     }
