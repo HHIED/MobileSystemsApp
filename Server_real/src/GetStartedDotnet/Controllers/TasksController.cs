@@ -47,6 +47,13 @@ namespace GetStartedDotnet.Controllers
             }
             
         }
+        [Route("{taskId}")]
+        [HttpGet("{taskID}")]
+        public ActionResult GetTask(int taskId)
+        {
+            Models.Task task = _dbContext.Tasks.Include("Creator").Include("Accepter").SingleOrDefault(x => x.Id == taskId);
+            return Json(task);
+        }
 
         // POST api/values
         [Route("create/{creatorId}")]

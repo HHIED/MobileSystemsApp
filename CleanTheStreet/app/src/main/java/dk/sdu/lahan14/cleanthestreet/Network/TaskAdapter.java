@@ -1,6 +1,8 @@
 package dk.sdu.lahan14.cleanthestreet.Network;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class TaskAdapter extends ArrayAdapter<Task>{
         super(context, resource, items);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -49,6 +52,7 @@ public class TaskAdapter extends ArrayAdapter<Task>{
             TextView tt2 = (TextView) v.findViewById(R.id.description);
             ImageButton upvoteButton = (ImageButton) v.findViewById(R.id.imageButton);
             upvoteButton.setTag(R.id.upvoteId, p.getId());
+            upvoteButton.setFocusable(View.NOT_FOCUSABLE);
 
 
 

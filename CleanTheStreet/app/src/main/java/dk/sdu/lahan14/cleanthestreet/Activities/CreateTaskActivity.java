@@ -15,6 +15,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
 import cz.msebera.android.httpclient.Header;
@@ -64,9 +65,13 @@ public class CreateTaskActivity extends BasicTaskActivity {
 
     private void createTask() throws UnsupportedEncodingException {
         Bitmap image = ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
-        byte[] imagebytes = BitMapConverter.getBytes(image);
-        String imageString = Base64.encodeToString(imagebytes, Base64.DEFAULT);
-        TaskDto task = new TaskDto(1, imageString, "des", 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude());
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        String imageString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+        TaskDto task = new TaskDto(1, getString(R.string.image_test), mDescriptionET.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude());
         String jsonTask = gson.toJson(task);
         StringEntity entity = new StringEntity(jsonTask);
         // TODO: Change "1" in url to local userId
