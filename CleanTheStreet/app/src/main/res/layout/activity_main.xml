@@ -7,6 +7,7 @@
     tools:context="dk.sdu.lahan14.cleanthestreet.MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -19,9 +20,21 @@
         android:id="@+id/viewTasksBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
         android:onClick="viewTasksClick"
         android:text="View Tasks"
-        tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="58dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="23dp"
+        android:text="Button"
+        app:layout_constraintStart_toStartOf="@+id/viewTasksBtn"
+        app:layout_constraintTop_toBottomOf="@+id/viewTasksBtn" />
 
 </android.support.constraint.ConstraintLayout>

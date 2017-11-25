@@ -3,5 +3,9 @@
     <item
         type="id"
         name="upvoteId" />
+    <item
+        type="id"
+        name="viewTaskId"/>
+
 </resources>
 

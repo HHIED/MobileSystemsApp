@@ -1,11 +1,14 @@
 package dk.sdu.lahan14.cleanthestreet;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.util.*;
 import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,6 +37,7 @@ public class ViewTasksActivity extends AppCompatActivity {
     private  AsyncHttpClient client;
     private  Gson gson;
     private ImageButton upvoteButton;
+    ListView customListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,16 @@ public class ViewTasksActivity extends AppCompatActivity {
         client = new AsyncHttpClient();
         gson = new Gson();
         getTasks();
+        customListView = (ListView) findViewById(R.id.tasksListView);
+        customListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Task task  = (Task) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(ViewTasksActivity.this, ViewTaskActivity.class);
+                intent.putExtra("id", task.getId());
+                startActivity(intent);
+            }
+        });
      //   try {
      //       createTask();
       //  } catch (UnsupportedEncodingException e) {
@@ -58,6 +72,9 @@ public class ViewTasksActivity extends AppCompatActivity {
     }
 
 
+    private void viewTask() {
+
+    }
 
     public void getTasks() {
         final RequestHandle requestHandle = client.get("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks", new AsyncHttpResponseHandler() {
@@ -77,23 +94,25 @@ public class ViewTasksActivity extends AppCompatActivity {
 
                         try {
                             JSONArray array = jsonObject.getJSONArray("$values");
-                            JSONObject task = array.getJSONObject(0);
-                            int score = task.getInt("Score");
-                            String description = task.getString("Description");
-                            int id = task.getInt("Id");
-                            float latitude = (float) task.getDouble("Lattitude");
-                            float longitude = (float) task.getDouble("Longtitude");
-                            String imageString = (String) task.getString("Image");
-                            byte[] image = Base64.decode(imageString, Base64.NO_WRAP);
+                            for(int i =0; i<array.length();i++) {
+                                JSONObject task = array.getJSONObject(i);
+                                int score = task.getInt("Score");
+                                String description = task.getString("Description");
+                                int id = task.getInt("Id");
+                                float latitude = (float) task.getDouble("Lattitude");
+                                float longitude = (float) task.getDouble("Longtitude");
+                                String imageString = (String) task.getString("Image");
+                                TaskDto dto = new TaskDto(id, getString(R.string.image_test), description, score, latitude, longitude);
 
-                            Task taskObject = new Task(id, score, description, latitude, longitude);
-                            tasks.add(taskObject);
+                                Task taskObject = dto.toTask();
+                                tasks.add(taskObject);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
 
-                    ListView customListView = (ListView) findViewById(R.id.tasksListView);
+
                     // get data from the table by the ListAdapter
                     //ArrayAdapter customAdapter = new ArrayAdapter(ViewTasksActivity.this, android.R.layout.simple_list_item_1, tasks);
                     TaskAdapter customAdapter = new TaskAdapter(ViewTasksActivity.this, R.layout.task_view, tasks);
