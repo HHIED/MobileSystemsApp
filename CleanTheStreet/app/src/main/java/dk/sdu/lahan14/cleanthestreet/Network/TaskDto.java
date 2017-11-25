@@ -3,6 +3,8 @@ package dk.sdu.lahan14.cleanthestreet.Network;
 import android.graphics.Bitmap;
 import android.util.Base64;
 
+import dk.sdu.lahan14.cleanthestreet.Util.Task;
+
 /**
  * Created by lasse on 18-11-2017.
  */

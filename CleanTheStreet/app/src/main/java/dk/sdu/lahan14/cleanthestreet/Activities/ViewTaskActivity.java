@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 import dk.sdu.lahan14.cleanthestreet.R;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
 
@@ -77,7 +78,8 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mTaskCreatorTextView.setText(mTask.getCreator());
         mIamgeView.setImageBitmap(mTask.getImage());
         mDescriptionTextView.setText(mTask.getDescription());
-        mScoreTextView.setText(mTask.getScore());
+        int score = mTask.getScore();
+        mScoreTextView.setText(Integer.toString(score));
         calculateAndSetDistance();
         // TODO: identify self
         // TODO: disable upvote button for self
