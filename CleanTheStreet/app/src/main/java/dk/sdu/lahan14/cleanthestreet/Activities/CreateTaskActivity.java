@@ -49,6 +49,7 @@ public class CreateTaskActivity extends BasicTaskActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = retrieveBitmap(requestCode, resultCode, data);
 
         if (bitmap != null) {

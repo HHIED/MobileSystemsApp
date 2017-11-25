@@ -83,6 +83,7 @@ public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCa
     private void getImageFromCamera() {
         Intent takePictueIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictueIntent.resolveActivity(getPackageManager()) != null) {
+
             ((Activity) context).startActivityForResult(takePictueIntent, Constants.CAMERA_IMAGE_REQUEST_CODE);
         }
     }
@@ -94,7 +95,11 @@ public class BasicTaskActivity extends AppCompatActivity implements OnMapReadyCa
             if (resultCode == RESULT_OK) {
                 Uri imageUri = data.getData();
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    if(imageUri==null) {
+                        bitmap = (Bitmap)data.getExtras().get("data");
+                    } else {
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    }
                     if (bitmap.getHeight() > 1024) {
                         int nh = (int) (bitmap.getHeight() * (1024.0 / bitmap.getWidth()));
                         bitmap = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
