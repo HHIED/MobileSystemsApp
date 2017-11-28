@@ -19,14 +19,45 @@ public class TaskDto {
     public float longtitude=56;
     public String creator="";
     public String accepter="";
+    public String completedimage = "";
+    public float distance = 0;
 
-    public TaskDto(int id, String image, String description, int score, float lattitude, float longtitude) {
+    public TaskDto(int id, String image, String description, int score, float lattitude, float longtitude, String accepter, String creator, float distance) {
         this.id = id;
         this.image = image;
         this.description = description;
         this.score = score;
         this.lattitude = lattitude;
         this.longtitude = longtitude;
+        this.accepter = accepter;
+        this.creator = creator;
+        this.distance = distance;
+
+    }
+
+    public TaskDto(int id, String image, String description, int score, float lattitude, float longtitude, String accepter, String creator) {
+        this.id = id;
+        this.image = image;
+        this.description = description;
+        this.score = score;
+        this.lattitude = lattitude;
+        this.longtitude = longtitude;
+        this.accepter = accepter;
+        this.creator = creator;
+
+    }
+
+    public TaskDto(int id, String image, String description, int score, float lattitude, float longtitude, String accepter, String creator, String completedImage) {
+        this.id = id;
+        this.image = image;
+        this.description = description;
+        this.score = score;
+        this.lattitude = lattitude;
+        this.longtitude = longtitude;
+        this.accepter = accepter;
+        this.creator = creator;
+        this.completedimage = completedImage;
+
     }
 
     public TaskDto(int id) {
@@ -41,6 +72,7 @@ public class TaskDto {
         byte[] image = Base64.decode(getImage(), Base64.NO_WRAP);
         Bitmap imagebit = BitMapConverter.getImage(image);
         Task t = new Task(id, imagebit, description, score, lattitude, longtitude, creator,accepter);
+        t.setDistance(distance);
         return t;
     }
 

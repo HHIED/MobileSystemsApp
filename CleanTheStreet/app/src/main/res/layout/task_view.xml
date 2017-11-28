@@ -15,7 +15,7 @@
 
             <RelativeLayout
                 android:layout_width="374dp"
-                android:layout_height="match_parent">
+                android:layout_height="77dp">
 
                 <ImageButton
                     android:id="@+id/imageButton"
@@ -32,9 +32,9 @@
                     android:id="@+id/score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="18dp"
-                    android:layout_toEndOf="@+id/imageButton"
+                    android:layout_alignBottom="@+id/imageButton"
+                    android:layout_marginBottom="11dp"
+                    android:layout_toEndOf="@+id/distance"
                     android:layout_weight="2"
                     android:text="Score" />
 
@@ -48,6 +48,14 @@
                     android:layout_toEndOf="@+id/score"
                     android:layout_weight="1"
                     android:text="Description" />
+
+                <TextView
+                    android:id="@+id/distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:text="TextView" />
 
             </RelativeLayout>
 

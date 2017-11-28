@@ -76,9 +76,9 @@
             android:id="@+id/btn_accept_task"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:onClick="onAcceptTask"
-            android:text="@string/btn_accept_task"
-            android:clickable="true" />
+            android:text="@string/btn_accept_task" />
 
     </LinearLayout>
 
