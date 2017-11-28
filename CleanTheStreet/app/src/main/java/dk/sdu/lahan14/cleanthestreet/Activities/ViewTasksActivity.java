@@ -1,7 +1,12 @@
 package dk.sdu.lahan14.cleanthestreet.Activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,6 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.loopj.android.http.*;
 
@@ -32,10 +41,12 @@ import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 
 public class ViewTasksActivity extends AppCompatActivity {
 
-    private  AsyncHttpClient client;
-    private  Gson gson;
+    private AsyncHttpClient client;
+    private Gson gson;
     private ImageButton upvoteButton;
     ListView customListView;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location lastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +56,48 @@ public class ViewTasksActivity extends AppCompatActivity {
         client = new AsyncHttpClient();
         gson = new Gson();
         getTasks();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getLastLocation();
         customListView = (ListView) findViewById(R.id.tasksListView);
-        customListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        customListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Task task  = (Task) adapterView.getItemAtPosition(i);
+                Task task = (Task) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(ViewTasksActivity.this, ViewTaskActivity.class);
                 intent.putExtra("id", task.getId());
                 startActivity(intent);
             }
         });
-     //   try {
-     //       createTask();
-      //  } catch (UnsupportedEncodingException e) {
-       //     e.printStackTrace();
-       // }
-       //   getTasks();
+        //   try {
+        //       createTask();
+        //  } catch (UnsupportedEncodingException e) {
+        //     e.printStackTrace();
+        // }
+        //   getTasks();
 
+    }
+
+    private void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            lastLocation = location;
+                        }
+                    }
+                });
     }
 
     public void upvoteClick(View view) throws UnsupportedEncodingException {
@@ -100,7 +136,13 @@ public class ViewTasksActivity extends AppCompatActivity {
                                 float latitude = (float) task.getDouble("Lattitude");
                                 float longitude = (float) task.getDouble("Longtitude");
                                 String imageString = (String) task.getString("Image");
-                                TaskDto dto = new TaskDto(id, getString(R.string.image_test), description, score, latitude, longitude);
+                                Location location = new Location("");
+                                location.setLongitude(longitude);
+                                location.setLatitude(latitude);
+                                float distanceToLocation = lastLocation.distanceTo(location);
+                                TaskDto dto = new TaskDto(id, getString(R.string.image_test), description, score, latitude, longitude, "", "", distanceToLocation);
+
+
 
                                 Task taskObject = dto.toTask();
                                 tasks.add(taskObject);
@@ -137,15 +179,18 @@ public class ViewTasksActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void upvoteTask(int taskId) throws UnsupportedEncodingException {
-        TaskDto task = new TaskDto(taskId);
+        final TaskDto task = new TaskDto(taskId);
 
         String jsonTask = gson.toJson(task);
-        StringEntity entity = new StringEntity(jsonTask);
+        final StringEntity entity = new StringEntity(jsonTask);
         final RequestHandle handle = client.post(ViewTasksActivity.this, "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/IncreaseScore", entity, "application/json", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 getTasks();
+
             }
 
             @Override

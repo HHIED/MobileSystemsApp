@@ -32,6 +32,7 @@ import cz.msebera.android.httpclient.Header;
 
 import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Util.ActiveTask;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
 
 public class ViewTaskActivity extends BasicTaskActivity {
@@ -64,8 +65,6 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mScoreTextView = findViewById(R.id.tv_view_task_score_value);
         mAcceptTaskButton = findViewById(R.id.btn_accept_task);
 
-        // TODO: get task
-        /* For testing */
         getTask();
 
 
@@ -136,7 +135,8 @@ public class ViewTaskActivity extends BasicTaskActivity {
         // TODO: identify self
         mTask.setAccepter("Me");
         Intent completeActivityIntent = new Intent(this, CompleteTaskActivity.class);
-        completeActivityIntent.putExtra(Task.class.toString(), mTask);
+        //completeActivityIntent.putExtra(Task.class.toString(), mTask);
+        ActiveTask.activeTask = mTask;
         startActivity(completeActivityIntent);
     }
 
@@ -163,10 +163,20 @@ public class ViewTaskActivity extends BasicTaskActivity {
                             float latitude = (float) task.getDouble("lattitude");
                             float longitude = (float) task.getDouble("longtitude");
                             String imageString = (String) task.getString("image");
-                            TaskDto dto = new TaskDto(id, imageString, description, score, latitude, longitude);
+                            JSONObject creator = task.getJSONObject("creator");
+                            String creatorString = Integer.toString(creator.getInt("id"));
+                            String accepterString = null;
+                            if(!task.isNull("accepter")) {
+                                JSONObject accepter = task.getJSONObject("accepter");
+                                accepterString = Integer.toString(accepter.getInt("id"));
+                            }
+                            Location location = new Location("");
+;
+                            TaskDto dto = new TaskDto(id, imageString, description, score, latitude, longitude, accepterString, creatorString);
 
                             Task taskObject = dto.toTask();
                             mTask = taskObject;
+
                             updateDisplayData();
 
                     } catch (JSONException e) {

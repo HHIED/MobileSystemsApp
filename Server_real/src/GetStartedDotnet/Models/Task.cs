@@ -17,10 +17,12 @@ namespace GetStartedDotnet.Models
         public int Score { get; set; }
         public float Lattitude { get; set; }
         public float Longtitude { get; set; }
+        public byte[] CompletedImage { get; set; }
         [ForeignKey("CreatorId")]
         public virtual User Creator { get; set; }
         [ForeignKey("AccepterId")]
         public virtual User Accepter { get; set; }
+
 
         public Task()
         {

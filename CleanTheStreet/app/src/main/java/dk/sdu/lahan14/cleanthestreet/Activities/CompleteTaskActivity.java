@@ -2,15 +2,29 @@ package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.MapFragment;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
 
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import dk.sdu.lahan14.cleanthestreet.Network.BitMapConverter;
+import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Util.ActiveTask;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
 
 public class CompleteTaskActivity extends BasicTaskActivity {
@@ -22,14 +36,16 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     private ImageView mTaskImageView;
     private ImageView mCompletedImageView;
     private Button mDoneButton;
-
+    private Gson gson;
+    private AsyncHttpClient client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_task);
 
         super.setContext(this);
-
+        gson = new Gson();
+        client = new AsyncHttpClient();
         mCreatorTextView = findViewById(R.id.tv_complete_task_creator);
         mDescriptionTextView = findViewById(R.id.tv_complete_task_description);
         mScoreTextView = findViewById(R.id.tv_complete_task_score_value);
@@ -41,7 +57,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.f_complete_task_map);
         mapFragment.getMapAsync(this);
 
-        mTask = getIntent().getParcelableExtra(Task.class.toString());
+        mTask = ActiveTask.activeTask;
 
         updateDisplayData();
     }
@@ -49,7 +65,8 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     private void updateDisplayData() {
         mCreatorTextView.setText(mTask.getCreator());
         mDescriptionTextView.setText(mTask.getDescription());
-        mScoreTextView.setText(mTask.getScore());
+        int score = mTask.getScore();
+        mScoreTextView.setText(Integer.toString(score));
         mTaskImageView.setImageBitmap(mTask.getImage());
     }
 
@@ -63,8 +80,9 @@ public class CompleteTaskActivity extends BasicTaskActivity {
         }
     }
 
-    public void onDoneTask(View view) {
+    public void onDoneTask(View view) throws UnsupportedEncodingException {
         // TODO: send to server
+        finishTask();
         finish();
     }
 
@@ -72,5 +90,33 @@ public class CompleteTaskActivity extends BasicTaskActivity {
         mTask.setAccepter(null);
         // TODO: send to server
         finish();
+    }
+
+    private void finishTask() throws UnsupportedEncodingException {
+        Bitmap image = ((BitmapDrawable)mCompletedImageView.getDrawable()).getBitmap();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        String imageString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+        TaskDto task = new TaskDto(mTask.getId(),  imageString, mDescriptionTextView.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude(), "", "", imageString);
+        String jsonTask = gson.toJson(task);
+        StringEntity entity = new StringEntity(jsonTask);
+        // TODO: Change "1" in url to local userId
+        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/finishTask/1";
+
+        final RequestHandle handle = client.post(CompleteTaskActivity.this, url, entity, "application/json",  new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                //    getTasks();
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 }

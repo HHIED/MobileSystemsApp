@@ -72,7 +72,7 @@ public class CreateTaskActivity extends BasicTaskActivity {
         byte[] byteArray = byteArrayOutputStream .toByteArray();
         String imageString = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-        TaskDto task = new TaskDto(1, getString(R.string.image_test), mDescriptionET.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude());
+        TaskDto task = new TaskDto(1, imageString, mDescriptionET.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude(), "", "");
         String jsonTask = gson.toJson(task);
         StringEntity entity = new StringEntity(jsonTask);
         // TODO: Change "1" in url to local userId

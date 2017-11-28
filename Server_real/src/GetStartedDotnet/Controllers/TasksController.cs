@@ -34,12 +34,7 @@ namespace GetStartedDotnet.Controllers
             }
             else
             {
-                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").ToList();
-                foreach(Models.Task t in tasks)
-                {
-                    foreach(byte b in t.Image)
-                    Console.WriteLine(b);
-                }
+                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").OrderByDescending(x => x.Score).ToList();
                 JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
                 jsonSerializerSettings.TypeNameHandling = TypeNameHandling.Arrays;
                 JsonResult result = Json(tasks, jsonSerializerSettings);
@@ -84,6 +79,17 @@ namespace GetStartedDotnet.Controllers
             dbTask.Score++;
             _dbContext.SaveChanges();
             return Json(dbTask);
+        }
+
+        [Route("finishtask/{accepterId}")]
+        [HttpPost("{accepterId}")]
+        public ActionResult FinishTask([FromBody] TaskMinimal taskMin, int accepterId)
+        {
+            Models.Task task = _dbContext.Tasks.Find(taskMin.Id);
+            task.CompletedImage = taskMin.CompletedImage;
+            _dbContext.SaveChanges();
+            return Json(task);
+
         }
     }
 }

@@ -23,6 +23,7 @@ public class Task implements Parcelable {
     private double longitude;
     private final String creator;
     private String accepter;
+    private float distance;
 
     public Task(int id) {
         this.id = id;
@@ -68,6 +69,10 @@ public class Task implements Parcelable {
         this.creator = parcel.readString();
         this.accepter = parcel.readString();
     }
+
+    public float getDistance() {return  distance;};
+
+    public void setDistance(float distance) {this.distance=distance;};
 
     public int getId() {
         return id;
