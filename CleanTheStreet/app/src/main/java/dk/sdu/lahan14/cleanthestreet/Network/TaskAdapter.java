@@ -1,6 +1,9 @@
 package dk.sdu.lahan14.cleanthestreet.Network;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
@@ -10,8 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import dk.sdu.lahan14.cleanthestreet.Database.Database;
+import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.R;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
 
@@ -34,6 +40,25 @@ public class TaskAdapter extends ArrayAdapter<Task>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+        String[] projection = {
+                Database.UpvotedTasksEntry._ID,
+                Database.UpvotedTasksEntry.COLUMN_TASK_ID,
+        };
+
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor query = db.query(Database.UpvotedTasksEntry.TABLE_NAME, projection, null, null, null, null, null);
+
+        query.moveToNext();
+        int listSize = query.getCount();
+
+        List<Integer> upvotedTasks = new ArrayList<>();
+
+        for(int i = 0; i < listSize; i++){
+            upvotedTasks.add(query.getInt(1));
+            query.moveToNext();
+        }
+
         View v = convertView;
 
       //  ImageButton upvote = (ImageButton) v.findViewById(R.id.imageButton);
@@ -54,6 +79,11 @@ public class TaskAdapter extends ArrayAdapter<Task>{
             ImageButton upvoteButton = (ImageButton) v.findViewById(R.id.imageButton);
             upvoteButton.setTag(R.id.upvoteId, p.getId());
             upvoteButton.setFocusable(View.NOT_FOCUSABLE);
+            if(upvotedTasks.contains(p.getId())) {
+                upvoteButton.setColorFilter(Color.argb(255, 130, 130, 130));
+            } else {
+                upvoteButton.setColorFilter(Color.argb(255, 0, 255, 0));
+            }
 
 
 
