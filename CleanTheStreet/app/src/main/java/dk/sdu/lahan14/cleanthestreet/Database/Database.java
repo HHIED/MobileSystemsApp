@@ -16,6 +16,11 @@ public final class Database {
     public static class UserEntry implements BaseColumns {
         public static final String TABLE_NAME = "user";
         public static final String COLUMN_USER_ID = "title";
+
+        public static final String[] USER_PROJECTION = {
+                Database.UserEntry._ID,
+                Database.UserEntry.COLUMN_USER_ID,
+        };
     }
 
     public static class MyTaskEntry implements  BaseColumns {

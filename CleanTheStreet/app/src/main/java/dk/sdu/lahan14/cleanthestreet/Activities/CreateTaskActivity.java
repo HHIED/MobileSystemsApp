@@ -2,6 +2,7 @@ package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -80,8 +81,9 @@ public class CreateTaskActivity extends BasicTaskActivity {
         TaskDto task = new TaskDto(1, imageString, mDescriptionET.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude(), "", "");
         String jsonTask = gson.toJson(task);
         StringEntity entity = new StringEntity(jsonTask);
-        // TODO: Change "1" in url to local userId
-        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/create/1";
+
+        int userId = getUserId();
+        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/create/" + userId;
 
         final RequestHandle handle = client.post(CreateTaskActivity.this, url, entity, "application/json",  new AsyncHttpResponseHandler() {
             DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
@@ -112,6 +114,16 @@ public class CreateTaskActivity extends BasicTaskActivity {
 
             }
         });
+    }
+
+    private int getUserId() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+        Cursor query = db.query(Database.UserEntry.TABLE_NAME, Database.UserEntry.USER_PROJECTION, null, null, null, null, null);
+        query.moveToNext();
+
+        return query.getInt(1);
     }
 
 }
