@@ -18,6 +18,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import java.io.UnsupportedEncodingException;
 
 import cz.msebera.android.httpclient.Header;
+import dk.sdu.lahan14.cleanthestreet.Database.Database;
 import dk.sdu.lahan14.cleanthestreet.Database.Database.UserEntry;
 import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.R;
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
                 UserEntry.COLUMN_USER_ID,
         };
 
-        SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
         Cursor query = db_out.query(UserEntry.TABLE_NAME, projection, null, null, null, null, null, null);
         boolean empty = query.moveToNext();
         if(!empty) {

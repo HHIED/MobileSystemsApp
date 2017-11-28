@@ -12,19 +12,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "userData.db";
-    private static final String SQL_CREATE_ENTRIES =
+    private static final String SQL_CREATE_UPVOTED_TASK_ENTRIES =
+            "CREATE TABLE " + Database.UpvotedTasksEntry.TABLE_NAME + " (" +
+                    Database.UpvotedTasksEntry._ID + " INTEGER PRIMARY KEY," +
+                    Database.UpvotedTasksEntry.COLUMN_TASK_ID + " TEXT)";
+    private static final String SQL_CREATE_USER_ENTRIES =
             "CREATE TABLE " + Database.UserEntry.TABLE_NAME + " (" +
                     Database.UserEntry._ID + " INTEGER PRIMARY KEY," +
-                    Database.UserEntry.COLUMN_USER_ID + " TEXT)";
+                    Database.UserEntry.COLUMN_USER_ID + " TEXT);";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + Database.UserEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + Database.UserEntry.TABLE_NAME + "; \n" +
+            "DROP TABLE IF EXISTS " + Database.UpvotedTasksEntry.TABLE_NAME;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_UPVOTED_TASK_ENTRIES);
+        db.execSQL(SQL_CREATE_USER_ENTRIES );
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is

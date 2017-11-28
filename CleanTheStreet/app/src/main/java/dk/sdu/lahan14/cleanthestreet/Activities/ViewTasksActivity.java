@@ -1,7 +1,12 @@
 package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -24,6 +29,8 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import dk.sdu.lahan14.cleanthestreet.Database.Database;
+import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.R;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
 import dk.sdu.lahan14.cleanthestreet.Network.TaskAdapter;
@@ -137,21 +144,68 @@ public class ViewTasksActivity extends AppCompatActivity {
         });
     }
 
-    private void upvoteTask(int taskId) throws UnsupportedEncodingException {
+    private void upvoteTask(final int taskId) throws UnsupportedEncodingException {
         TaskDto task = new TaskDto(taskId);
 
-        String jsonTask = gson.toJson(task);
-        StringEntity entity = new StringEntity(jsonTask);
-        final RequestHandle handle = client.post(ViewTasksActivity.this, "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/IncreaseScore", entity, "application/json", new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                getTasks();
-            }
+        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+        SQLiteDatabase db_out = databaseHelper.getReadableDatabase();
+        String[] projection = {
+                Database.UpvotedTasksEntry._ID,
+                Database.UpvotedTasksEntry.COLUMN_TASK_ID,
+        };
 
-            }
-        });
+        Cursor query = db_out.rawQuery("SELECT * FROM " + Database.UpvotedTasksEntry.TABLE_NAME + " WHERE " + Database.UpvotedTasksEntry.COLUMN_TASK_ID + " = " + taskId, null);
+        query.moveToNext();
+
+        if(query.getCount() > 0 && query.getInt(1)==taskId){
+            AlertDialog.Builder message = new AlertDialog.Builder(this);
+            message.setMessage("You have already upvoted this task once");
+            message.setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //dismiss the dialog
+                        }
+                    });
+            message.show();
+        } else {
+
+            String jsonTask = gson.toJson(task);
+            final StringEntity entity = new StringEntity(jsonTask);
+            final RequestHandle handle = client.post(ViewTasksActivity.this, "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/IncreaseScore", entity, "application/json", new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    try {
+                        String json = new String(responseBody, "UTF-8");
+                        JSONObject task = new JSONObject(json);
+                        int id = task.getInt("id");
+                        persistUpvotedTask(id);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    getTasks();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                }
+            });
+        }
+    }
+
+    protected void persistUpvotedTask(int taskId){
+        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+        String[] projection = {
+                 Database.UpvotedTasksEntry._ID,
+                 Database.UpvotedTasksEntry.COLUMN_TASK_ID,
+        };
+        SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Database.UpvotedTasksEntry.COLUMN_TASK_ID, taskId);
+
+        db_in.insert(Database.UpvotedTasksEntry.TABLE_NAME, null, values);
     }
 }

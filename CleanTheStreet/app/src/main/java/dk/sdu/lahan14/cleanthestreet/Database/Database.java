@@ -17,4 +17,14 @@ public final class Database {
         public static final String TABLE_NAME = "user";
         public static final String COLUMN_USER_ID = "title";
     }
+
+    public static class MyTaskEntry implements  BaseColumns {
+        public static final String TABLE_NAME = "myTask";
+        public static final String COLUMN_TASK_ID = "taskId";
+    }
+
+    public static class UpvotedTasksEntry implements  BaseColumns{
+        public static final String TABLE_NAME = "upvotedTasks";
+        public static final String COLUMN_TASK_ID = "taskId";
+    }
 }

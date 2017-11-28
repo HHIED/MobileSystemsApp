@@ -1,6 +1,8 @@
 package dk.sdu.lahan14.cleanthestreet.Activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -20,9 +22,13 @@ import java.io.UnsupportedEncodingException;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import dk.sdu.lahan14.cleanthestreet.Database.Database;
+import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.Network.BitMapConverter;
 import dk.sdu.lahan14.cleanthestreet.R;
 import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
+import dk.sdu.lahan14.cleanthestreet.Util.Task;
+import dk.sdu.lahan14.cleanthestreet.Util.User;
 
 public class CreateTaskActivity extends BasicTaskActivity {
 
@@ -44,7 +50,6 @@ public class CreateTaskActivity extends BasicTaskActivity {
         mDescriptionET = findViewById(R.id.et_task_description);
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.f_map);
         mapFragment.getMapAsync(this);
-
     }
 
     @Override
@@ -79,9 +84,27 @@ public class CreateTaskActivity extends BasicTaskActivity {
         String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/create/1";
 
         final RequestHandle handle = client.post(CreateTaskActivity.this, url, entity, "application/json",  new AsyncHttpResponseHandler() {
+            DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                //    getTasks();
+                try {
+                    String[] projection = {
+                            Database.MyTaskEntry._ID,
+                            Database.MyTaskEntry.COLUMN_TASK_ID,
+                    };
+                    String json = new String(responseBody, "UTF-8");
+                    Gson converter = new Gson();
+                    Task task = converter.fromJson(json, Task.class);
+                    SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put(Database.MyTaskEntry.COLUMN_TASK_ID, task.getId());
+
+                    db_in.insert(Database.MyTaskEntry.TABLE_NAME, null, values);
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
