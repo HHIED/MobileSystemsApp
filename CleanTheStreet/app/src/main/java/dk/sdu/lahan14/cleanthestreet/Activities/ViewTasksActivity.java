@@ -41,9 +41,13 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import dk.sdu.lahan14.cleanthestreet.Database.Database;
 import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Util.Constants;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
 import dk.sdu.lahan14.cleanthestreet.Network.TaskAdapter;
 import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
 public class ViewTasksActivity extends AppCompatActivity {
@@ -93,6 +97,7 @@ public class ViewTasksActivity extends AppCompatActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[] {ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, Constants.PERMISSIONS_REQUEST_LOCATION);
             return;
         }
         mFusedLocationClient.getLastLocation()
