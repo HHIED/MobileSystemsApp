@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
                         db_in.insert(UserEntry.TABLE_NAME, null, values);
 
+                        User.userId = user.getId();
+
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }

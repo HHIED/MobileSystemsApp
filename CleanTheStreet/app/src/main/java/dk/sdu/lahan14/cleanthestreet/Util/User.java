@@ -5,6 +5,8 @@ package dk.sdu.lahan14.cleanthestreet.Util;
  */
 
 public class User {
+    public static int userId;
+
     private int id;
     private String name;
 

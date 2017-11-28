@@ -82,8 +82,7 @@ public class CreateTaskActivity extends BasicTaskActivity {
         String jsonTask = gson.toJson(task);
         StringEntity entity = new StringEntity(jsonTask);
 
-        int userId = getUserId();
-        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/create/" + userId;
+        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/create/" + User.userId;
 
         final RequestHandle handle = client.post(CreateTaskActivity.this, url, entity, "application/json",  new AsyncHttpResponseHandler() {
             DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
@@ -115,15 +114,4 @@ public class CreateTaskActivity extends BasicTaskActivity {
             }
         });
     }
-
-    private int getUserId() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
-
-        Cursor query = db.query(Database.UserEntry.TABLE_NAME, Database.UserEntry.USER_PROJECTION, null, null, null, null, null);
-        query.moveToNext();
-
-        return query.getInt(1);
-    }
-
 }

@@ -26,6 +26,7 @@ import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 import dk.sdu.lahan14.cleanthestreet.R;
 import dk.sdu.lahan14.cleanthestreet.Util.ActiveTask;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
+import dk.sdu.lahan14.cleanthestreet.Util.User;
 
 public class CompleteTaskActivity extends BasicTaskActivity {
 
@@ -103,8 +104,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
         TaskDto task = new TaskDto(mTask.getId(),  imageString, mDescriptionTextView.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude(), "", "", imageString);
         String jsonTask = gson.toJson(task);
         StringEntity entity = new StringEntity(jsonTask);
-        // TODO: Change "1" in url to local userId
-        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/finishTask/1";
+        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/finishTask/" + User.userId;
 
         final RequestHandle handle = client.post(CompleteTaskActivity.this, url, entity, "application/json",  new AsyncHttpResponseHandler() {
             @Override
