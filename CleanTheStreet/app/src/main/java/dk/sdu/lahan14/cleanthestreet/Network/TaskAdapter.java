@@ -75,6 +75,7 @@ public class TaskAdapter extends ArrayAdapter<Task>{
         if (p != null) {
             TextView tt1 = (TextView) v.findViewById(R.id.score);
             TextView tt2 = (TextView) v.findViewById(R.id.description);
+            TextView tt3 = (TextView) v.findViewById(R.id.distance);
             ImageButton upvoteButton = (ImageButton) v.findViewById(R.id.imageButton);
             upvoteButton.setTag(R.id.upvoteId, p.getId());
             upvoteButton.setFocusable(View.NOT_FOCUSABLE);
@@ -96,6 +97,10 @@ public class TaskAdapter extends ArrayAdapter<Task>{
                 tt2.setText(p.getDescription());
             }
 
+            if(tt3!= null) {
+                String distance = String.format("%.0f", p.getDistance());
+                tt3.setText("Distance: " + distance +"m");
+            }
             //v.setTag(R.id.upvoteId, p.getId());
         }
 
