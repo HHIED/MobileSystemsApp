@@ -6,6 +6,8 @@
     <string name="btn_done_task">Done</string>
     <string name="btn_abandon_task">Abandon task</string>
     <string name="btn_add_completed_image">Add completed image</string>
+    <string name="btn_approve_task">Accept</string>
+    <string name="btn_disapprove_task">Deny</string>
     <string name="et_description_hint">Enter description</string>
     <string name="dlg_choose_image_source">Choose image source</string>
     <string name="dlg_option_gallery">Gallery</string>
