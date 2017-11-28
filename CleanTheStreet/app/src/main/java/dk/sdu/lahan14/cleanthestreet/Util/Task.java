@@ -17,6 +17,7 @@ public class Task implements Parcelable {
 
     private int id;
     private Bitmap image;
+    private Bitmap completedImage;
     private String description;
     private int score;
     private double latitude;
@@ -88,6 +89,14 @@ public class Task implements Parcelable {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public Bitmap getCompletedImage() {
+        return completedImage;
+    }
+
+    public void setCompletedImage(Bitmap completedImage) {
+        this.completedImage = completedImage;
     }
 
     public String getDescription() {
