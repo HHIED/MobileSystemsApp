@@ -42,6 +42,7 @@ import dk.sdu.lahan14.cleanthestreet.R;
 import dk.sdu.lahan14.cleanthestreet.Util.ActiveTask;
 import dk.sdu.lahan14.cleanthestreet.Util.Constants;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
+import dk.sdu.lahan14.cleanthestreet.Util.User;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -81,7 +82,7 @@ public class ViewMyTasksActivity extends AppCompatActivity {
 
     public void getTasks() {
         //TODO: Change 1 to userId
-        final RequestHandle requestHandle = client.get("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/mytasks/1", new AsyncHttpResponseHandler() {
+        final RequestHandle requestHandle = client.get("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/mytasks/"+User.userId, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
