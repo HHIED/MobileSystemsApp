@@ -22,6 +22,7 @@ namespace GetStartedDotnet.Models
         public virtual User Creator { get; set; }
         [ForeignKey("AccepterId")]
         public virtual User Accepter { get; set; }
+        public bool IsApproved { get; set; }
 
 
         public Task()

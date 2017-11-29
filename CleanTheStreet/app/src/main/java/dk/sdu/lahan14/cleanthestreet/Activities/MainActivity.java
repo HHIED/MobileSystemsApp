@@ -104,4 +104,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void myTasksClick(View view) {
+        Intent intent = new Intent(this, ViewMyTasksActivity.class);
+        startActivity(intent);
+    }
+
 }

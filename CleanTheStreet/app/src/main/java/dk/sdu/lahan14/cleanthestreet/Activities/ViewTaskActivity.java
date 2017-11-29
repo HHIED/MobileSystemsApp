@@ -64,9 +64,7 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mDistanceTextView = findViewById(R.id.tv_view_task_distance);
         mScoreTextView = findViewById(R.id.tv_view_task_score_value);
         mAcceptTaskButton = findViewById(R.id.btn_accept_task);
-
-        getTask();
-
+        mTask = ActiveTask.activeTask;
 
 
     }
@@ -138,72 +136,6 @@ public class ViewTaskActivity extends BasicTaskActivity {
         //completeActivityIntent.putExtra(Task.class.toString(), mTask);
         ActiveTask.activeTask = mTask;
         startActivity(completeActivityIntent);
-    }
-
-    public void getTask() {
-        final RequestHandle requestHandle = client.get("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/"+id, new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // called when response HTTP status is "200 OK"
-                try {
-                    String json = new String(response, "UTF-8");
-                    JSONObject task = new JSONObject(json);
-
-                    try {
-
-                            int score = task.getInt("score");
-                            String description = task.getString("description");
-                            int id = task.getInt("id");
-                            float latitude = (float) task.getDouble("lattitude");
-                            float longitude = (float) task.getDouble("longtitude");
-                            String imageString = (String) task.getString("image");
-                            JSONObject creator = task.getJSONObject("creator");
-                            String creatorString = Integer.toString(creator.getInt("id"));
-                            String accepterString = null;
-                            if(!task.isNull("accepter")) {
-                                JSONObject accepter = task.getJSONObject("accepter");
-                                accepterString = Integer.toString(accepter.getInt("id"));
-                            }
-                            Location location = new Location("");
-;
-                            TaskDto dto = new TaskDto(id, imageString, description, score, latitude, longitude, accepterString, creatorString);
-
-                            Task taskObject = dto.toTask();
-                            mTask = taskObject;
-
-                            updateDisplayData();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    // get data from the table by the ListAdapter
-                    //ArrayAdapter customAdapter = new ArrayAdapter(ViewTasksActivity.this, android.R.layout.simple_list_item_1, tasks);
-
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-            }
-
-            @Override
-            public void onRetry(int retryNo) {
-                // called when request is retried
-            }
-        });
     }
 
 }

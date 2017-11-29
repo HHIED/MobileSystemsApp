@@ -41,6 +41,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import dk.sdu.lahan14.cleanthestreet.Database.Database;
 import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.R;
+import dk.sdu.lahan14.cleanthestreet.Util.ActiveTask;
 import dk.sdu.lahan14.cleanthestreet.Util.Constants;
 import dk.sdu.lahan14.cleanthestreet.Util.Task;
 import dk.sdu.lahan14.cleanthestreet.Network.TaskAdapter;
@@ -76,6 +77,7 @@ public class ViewTasksActivity extends AppCompatActivity {
                 Task task = (Task) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(ViewTasksActivity.this, ViewTaskActivity.class);
                 intent.putExtra("id", task.getId());
+                ActiveTask.activeTask = task;
                 startActivity(intent);
             }
         });
@@ -148,12 +150,13 @@ public class ViewTasksActivity extends AppCompatActivity {
                                 float latitude = (float) task.getDouble("Lattitude");
                                 float longitude = (float) task.getDouble("Longtitude");
                                 String imageString = (String) task.getString("Image");
+                                boolean isApprove = (boolean) task.getBoolean("IsApproved");
                                 Location location = new Location("");
                                 location.setLongitude(longitude);
                                 location.setLatitude(latitude);
                                 float distanceToLocation = lastLocation.distanceTo(location);
                                 TaskDto dto = new TaskDto(id, getString(R.string.image_test), description, score, latitude, longitude, "", "", distanceToLocation);
-
+                                dto.isApproved = isApprove;
 
 
                                 Task taskObject = dto.toTask();

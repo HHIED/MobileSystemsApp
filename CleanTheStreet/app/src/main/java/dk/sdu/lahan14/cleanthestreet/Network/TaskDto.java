@@ -21,6 +21,8 @@ public class TaskDto {
     public String accepter="";
     public String completedimage = "";
     public float distance = 0;
+    public boolean isCompleted = false;
+    public boolean isApproved = false;
 
     public TaskDto(int id, String image, String description, int score, float lattitude, float longtitude, String accepter, String creator, float distance) {
         this.id = id;
@@ -71,7 +73,14 @@ public class TaskDto {
     public Task toTask() {
         byte[] image = Base64.decode(getImage(), Base64.NO_WRAP);
         Bitmap imagebit = BitMapConverter.getImage(image);
+        byte[] completedImage = Base64.decode(getImage(), Base64.NO_WRAP);
+        Bitmap completedBit = BitMapConverter.getImage(completedImage);
         Task t = new Task(id, imagebit, description, score, lattitude, longtitude, creator,accepter);
+        t.setCompletedImage(completedBit);
+        if(isCompleted) {
+            t.setIsCompleted(true);
+        }
+        t.setIsApproved(isApproved);
         t.setDistance(distance);
         return t;
     }

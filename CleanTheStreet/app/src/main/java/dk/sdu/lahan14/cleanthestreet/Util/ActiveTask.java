@@ -7,5 +7,6 @@ package dk.sdu.lahan14.cleanthestreet.Util;
 public class ActiveTask {
 
     public static Task activeTask = null;
+    public static Task activeMyTask = null;
 
 }

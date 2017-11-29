@@ -25,6 +25,8 @@ public class Task implements Parcelable {
     private final String creator;
     private String accepter;
     private float distance;
+    private boolean isCompleted = false;
+    private boolean isApproved = false;
 
     public Task(int id) {
         this.id = id;
@@ -70,6 +72,14 @@ public class Task implements Parcelable {
         this.creator = parcel.readString();
         this.accepter = parcel.readString();
     }
+
+    public boolean isApproved() {return isApproved;};
+
+    public void setIsApproved(boolean isApproved) {this.isApproved = isApproved;};
+
+    public boolean isCompleted() {return isCompleted;};
+
+    public void setIsCompleted(boolean isCompleted) {this.isCompleted = isCompleted;};
 
     public float getDistance() {return  distance;};
 

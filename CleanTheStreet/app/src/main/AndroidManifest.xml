@@ -40,6 +40,10 @@
             android:parentActivityName=".Activities.ViewTaskActivity" />
         <activity android:name=".Activities.ViewTasksActivity" />
         <activity android:name=".Activities.ApproveCompletedTaskActivity" />
+        <activity
+            android:name=".Activities.ViewMyTasksActivity"
+            android:label="@string/title_activity_view_my_tasks"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

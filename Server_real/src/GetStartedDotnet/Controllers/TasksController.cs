@@ -34,7 +34,7 @@ namespace GetStartedDotnet.Controllers
             }
             else
             {
-                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").OrderByDescending(x => x.Score).ToList();
+                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").OrderByDescending(x => x.Score).Where(x => x.CompletedImage == null).Where(x=>x.IsApproved==false).ToList();
                 JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
                 jsonSerializerSettings.TypeNameHandling = TypeNameHandling.Arrays;
                 JsonResult result = Json(tasks, jsonSerializerSettings);
@@ -42,6 +42,25 @@ namespace GetStartedDotnet.Controllers
             }
             
         }
+        [Route("mytasks/{userId}")]
+        [HttpGet("{userId}")]
+        public ActionResult GetUserTasks(int userId)
+        {
+            if (_dbContext == null)
+            {
+                return Json("No database");
+            }
+            else
+            {
+                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").Where(x => x.Creator.Id == userId).Where(x=>x.IsApproved==false).ToList();
+                JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
+                jsonSerializerSettings.TypeNameHandling = TypeNameHandling.Arrays;
+                JsonResult result = Json(tasks, jsonSerializerSettings);
+                return result;
+            }
+
+        }
+
         [Route("{taskId}")]
         [HttpGet("{taskID}")]
         public ActionResult GetTask(int taskId)
@@ -90,6 +109,24 @@ namespace GetStartedDotnet.Controllers
             _dbContext.SaveChanges();
             return Json(task);
 
+        }
+
+        [Route("approveTask/{taskId}")]
+        [HttpPost("{taskId}")]
+        public void ApproveTask(int taskId)
+        {
+            Models.Task task = _dbContext.Tasks.Find(taskId);
+            task.IsApproved = true;
+            _dbContext.SaveChanges();
+        }
+
+        [Route("declineTask/{taskId}")]
+        [HttpPost("{taskId}")]
+        public void DeclineTask(int taskId)
+        {
+            Models.Task task = _dbContext.Tasks.Find(taskId);
+            task.CompletedImage = null;
+            _dbContext.SaveChanges();
         }
     }
 }
