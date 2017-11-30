@@ -66,7 +66,7 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mAcceptTaskButton = findViewById(R.id.btn_accept_task);
         mTask = ActiveTask.activeTask;
         updateDisplayData();
-
+        updateDisplayData();
     }
 
     private void updateDisplayData() {
