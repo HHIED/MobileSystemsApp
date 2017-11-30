@@ -98,8 +98,12 @@ public class TaskAdapter extends ArrayAdapter<Task>{
             }
 
             if(tt3!= null) {
-                String distance = String.format("%.0f", p.getDistance());
-                tt3.setText("Distance: " + distance +"m");
+                float distanceInMeters = p.getDistance();
+                if (distanceInMeters > 1000) {
+                    tt3.setText(String.format("Distance: %.2f km", distanceInMeters / 1000.0 ));
+                } else {
+                    tt3.setText(String.format("Distance: %d m", (int) distanceInMeters));
+                }
             }
             //v.setTag(R.id.upvoteId, p.getId());
         }
