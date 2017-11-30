@@ -155,7 +155,7 @@ public class ViewTasksActivity extends AppCompatActivity {
                                 location.setLongitude(longitude);
                                 location.setLatitude(latitude);
                                 float distanceToLocation = lastLocation.distanceTo(location);
-                                TaskDto dto = new TaskDto(id, getString(R.string.image_test), description, score, latitude, longitude, "", "", distanceToLocation);
+                                TaskDto dto = new TaskDto(id, imageString, description, score, latitude, longitude, "", "", distanceToLocation);
                                 dto.isApproved = isApprove;
 
 
