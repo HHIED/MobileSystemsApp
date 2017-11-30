@@ -73,7 +73,7 @@ public class TaskDto {
     public Task toTask() {
         byte[] image = Base64.decode(getImage(), Base64.NO_WRAP);
         Bitmap imagebit = BitMapConverter.getImage(image);
-        byte[] completedImage = Base64.decode(getImage(), Base64.NO_WRAP);
+        byte[] completedImage = Base64.decode(completedimage, Base64.NO_WRAP);
         Bitmap completedBit = BitMapConverter.getImage(completedImage);
         Task t = new Task(id, imagebit, description, score, lattitude, longtitude, creator,accepter);
         t.setCompletedImage(completedBit);

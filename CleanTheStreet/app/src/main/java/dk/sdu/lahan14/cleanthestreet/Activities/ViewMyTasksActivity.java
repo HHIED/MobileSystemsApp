@@ -114,7 +114,7 @@ public class ViewMyTasksActivity extends AppCompatActivity {
                                 completed=true;
                                 completedImage = task.getString("CompletedImage");
                             }
-                            TaskDto dto = new TaskDto(id, getString(R.string.image_test), description, score, latitude, longitude, "", "", 0);
+                            TaskDto dto = new TaskDto(id, imageString, description, score, latitude, longitude, "", "", 0);
                             dto.completedimage = completedImage;
                             dto.isCompleted = completed;
                             dto.isApproved = isApprove;

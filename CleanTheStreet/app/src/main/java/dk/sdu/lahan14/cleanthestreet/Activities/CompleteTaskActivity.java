@@ -101,8 +101,10 @@ public class CompleteTaskActivity extends BasicTaskActivity {
         image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();
         String imageString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        byte[] dirtyImage = BitMapConverter.getBytes(mTask.getImage());
+        String dirtyImageString = Base64.encodeToString(dirtyImage, Base64.DEFAULT);
 
-        TaskDto task = new TaskDto(mTask.getId(),  imageString, mDescriptionTextView.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude(), "", "", imageString);
+        TaskDto task = new TaskDto(mTask.getId(), dirtyImageString, mDescriptionTextView.getText().toString(), 1, (float) mLastKnownLocation.getLatitude(), (float) mLastKnownLocation.getLongitude(), "", "", imageString);
         String jsonTask = gson.toJson(task);
         StringEntity entity = new StringEntity(jsonTask);
         String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/finishTask/" + User.userId;
