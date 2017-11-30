@@ -65,7 +65,7 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mScoreTextView = findViewById(R.id.tv_view_task_score_value);
         mAcceptTaskButton = findViewById(R.id.btn_accept_task);
         mTask = ActiveTask.activeTask;
-
+        updateDisplayData();
 
     }
 

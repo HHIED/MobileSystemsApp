@@ -82,7 +82,6 @@ public class CompleteTaskActivity extends BasicTaskActivity {
     }
 
     public void onDoneTask(View view) throws UnsupportedEncodingException {
-        // TODO: send to server
         finishTask();
         finish();
     }
