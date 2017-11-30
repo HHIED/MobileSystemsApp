@@ -61,25 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                    try {
-                        String[] projection = {
-                                UserEntry._ID,
-                                UserEntry.COLUMN_USER_ID,
-                        };
-                        String json = new String(response, "UTF-8");
-                        Gson converter = new Gson();
-                        User user = converter.fromJson(json, User.class);
-                        SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
-                        ContentValues values = new ContentValues();
-                        values.put(UserEntry.COLUMN_USER_ID, user.getId());
-
-                        db_in.insert(UserEntry.TABLE_NAME, null, values);
-
-                        User.userId = user.getId();
-
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
                 }
 
                 @Override

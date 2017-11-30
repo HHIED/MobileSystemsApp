@@ -89,23 +89,7 @@ public class CreateTaskActivity extends BasicTaskActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    String[] projection = {
-                            Database.MyTaskEntry._ID,
-                            Database.MyTaskEntry.COLUMN_TASK_ID,
-                    };
-                    String json = new String(responseBody, "UTF-8");
-                    Gson converter = new Gson();
-                    Task task = converter.fromJson(json, Task.class);
-                    SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
-                    ContentValues values = new ContentValues();
-                    values.put(Database.MyTaskEntry.COLUMN_TASK_ID, task.getId());
-
-                    db_in.insert(Database.MyTaskEntry.TABLE_NAME, null, values);
-
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                
             }
 
             @Override
