@@ -34,7 +34,7 @@ namespace GetStartedDotnet.Controllers
             }
             else
             {
-                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").OrderByDescending(x => x.Score).Where(x => x.CompletedImage == null).Where(x=>x.IsApproved==false).ToList();
+                List<Models.Task> tasks = _dbContext.Tasks.Include("Creator").Include("Accepter").OrderByDescending(x => x.Score).Where(x => x.CompletedImage == null).Where(x=>x.IsApproved==false).Where(x=>x.IsTaken==false).ToList();
                 JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
                 jsonSerializerSettings.TypeNameHandling = TypeNameHandling.Arrays;
                 JsonResult result = Json(tasks, jsonSerializerSettings);
@@ -126,6 +126,24 @@ namespace GetStartedDotnet.Controllers
         {
             Models.Task task = _dbContext.Tasks.Find(taskId);
             task.CompletedImage = null;
+            _dbContext.SaveChanges();
+        }
+
+        [Route("takeTask/{taskId}")]
+        [HttpPost("{taskId}")]
+        public void AcceptTask(int taskId)
+        {
+            Models.Task task = _dbContext.Tasks.Find(taskId);
+            task.IsTaken = true;
+            _dbContext.SaveChanges();
+        }
+
+        [Route("abandonTask/{taskId}")]
+        [HttpPost("{taskId}")]
+        public void AbandonTask(int taskId)
+        {
+            Models.Task task = _dbContext.Tasks.Find(taskId);
+            task.IsTaken = false;
             _dbContext.SaveChanges();
         }
     }

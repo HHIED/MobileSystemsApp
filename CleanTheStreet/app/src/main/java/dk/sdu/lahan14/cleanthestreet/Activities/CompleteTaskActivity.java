@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.Network.BitMapConverter;
 import dk.sdu.lahan14.cleanthestreet.Network.TaskDto;
 import dk.sdu.lahan14.cleanthestreet.R;
@@ -59,6 +60,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
         mapFragment.getMapAsync(this);
 
         mTask = ActiveTask.activeTask;
+        takeTask();
 
         updateDisplayData();
     }
@@ -88,7 +90,7 @@ public class CompleteTaskActivity extends BasicTaskActivity {
 
     public void onAbandonTask(View view) {
         mTask.setAccepter(null);
-        // TODO: send to server
+        abandonTask();
         finish();
     }
 
@@ -109,6 +111,40 @@ public class CompleteTaskActivity extends BasicTaskActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 //    getTasks();
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+    }
+
+    private void takeTask() {
+        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/takeTask/"+mTask.getId();
+        final RequestHandle handle = client.post(CompleteTaskActivity.this, url, null,  new AsyncHttpResponseHandler() {
+            DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+    }
+
+    private void abandonTask() {
+        String url = "https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/tasks/abandonTask/"+mTask.getId();
+        final RequestHandle handle = client.post(CompleteTaskActivity.this, url, null,  new AsyncHttpResponseHandler() {
+            DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
             }
 

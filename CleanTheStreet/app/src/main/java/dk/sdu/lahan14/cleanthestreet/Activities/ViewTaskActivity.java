@@ -86,12 +86,8 @@ public class ViewTaskActivity extends BasicTaskActivity {
         int score = mTask.getScore();
         mScoreTextView.setText(Integer.toString(score));
         calculateAndSetDistance();
-        // TODO: identify self
-        if (null != mTask.getAccepter()) {
-            mAcceptTaskButton.setClickable(false);
-        } else {
-            mAcceptTaskButton.setClickable(true);
-        }
+        mAcceptTaskButton.setClickable(true);
+
         updateUpvoteButton();
     }
 

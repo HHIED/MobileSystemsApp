@@ -23,6 +23,7 @@ namespace GetStartedDotnet.Models
         [ForeignKey("AccepterId")]
         public virtual User Accepter { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsTaken { get; set; }
 
 
         public Task()
@@ -39,6 +40,8 @@ namespace GetStartedDotnet.Models
             Longtitude = longtitude;
             Creator = creator;
             Accepter = accepter;
+            IsApproved = false;
+            IsTaken = false;
         }
 
     }
