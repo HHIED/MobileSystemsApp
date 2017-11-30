@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         Cursor query = db_out.query(UserEntry.TABLE_NAME, projection, null, null, null, null, null, null);
-        boolean empty = query.moveToNext();
-        if(!empty) {
+        boolean notEmpty = query.moveToNext();
+        if(!notEmpty) {
             client.post("https://getstarteddotnet-pansophical-bedding.eu-gb.mybluemix.net/api/users/create", new AsyncHttpResponseHandler() {
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
@@ -61,6 +61,25 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                    try {
+                        String[] projection = {
+                                UserEntry._ID,
+                                UserEntry.COLUMN_USER_ID,
+                        };
+                        String json = new String(response, "UTF-8");
+                        Gson converter = new Gson();
+                        User user = converter.fromJson(json, User.class);
+                        SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
+                        ContentValues values = new ContentValues();
+                        values.put(UserEntry.COLUMN_USER_ID, user.getId());
+
+                        db_in.insert(UserEntry.TABLE_NAME, null, values);
+
+                        User.userId = user.getId();
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -73,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                     // called when request is retried
                 }
             });
+        } else {
+            User.userId = query.getInt(1);
         }
     }
     public void viewTasksClick(View view ){
