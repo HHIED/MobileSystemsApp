@@ -1,6 +1,8 @@
 package dk.sdu.lahan14.cleanthestreet.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -12,6 +14,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "userData.db";
+
+    private String[] projection = {
+            Database.UpvotedTasksEntry._ID,
+            Database.UpvotedTasksEntry.COLUMN_TASK_ID,
+    };
 
     private static final String SQL_CREATE_UPVOTED_TASK_ENTRIES =
             "CREATE TABLE " + Database.UpvotedTasksEntry.TABLE_NAME + " (" +
@@ -41,5 +48,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public Cursor queryTask(final int taskId) {
+        Cursor query = getReadableDatabase().rawQuery("SELECT * FROM " + Database.UpvotedTasksEntry.TABLE_NAME + " WHERE " + Database.UpvotedTasksEntry.COLUMN_TASK_ID + " = " + taskId, null);
+        return query;
+    }
+
+    public void persistUpvotedTask(final int taskId){
+        SQLiteDatabase db_in = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Database.UpvotedTasksEntry.COLUMN_TASK_ID, taskId);
+        db_in.insert(Database.UpvotedTasksEntry.TABLE_NAME, null, values);
     }
 }

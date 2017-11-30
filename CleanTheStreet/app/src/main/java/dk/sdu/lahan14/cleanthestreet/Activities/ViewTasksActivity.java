@@ -1,21 +1,16 @@
 package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -23,7 +18,6 @@ import android.widget.ListView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.loopj.android.http.*;
@@ -38,7 +32,6 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
-import dk.sdu.lahan14.cleanthestreet.Database.Database;
 import dk.sdu.lahan14.cleanthestreet.Database.DatabaseHelper;
 import dk.sdu.lahan14.cleanthestreet.R;
 import dk.sdu.lahan14.cleanthestreet.Util.ActiveTask;
@@ -200,13 +193,7 @@ public class ViewTasksActivity extends AppCompatActivity {
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
-        SQLiteDatabase db_out = databaseHelper.getReadableDatabase();
-        String[] projection = {
-                Database.UpvotedTasksEntry._ID,
-                Database.UpvotedTasksEntry.COLUMN_TASK_ID,
-        };
-
-        Cursor query = db_out.rawQuery("SELECT * FROM " + Database.UpvotedTasksEntry.TABLE_NAME + " WHERE " + Database.UpvotedTasksEntry.COLUMN_TASK_ID + " = " + taskId, null);
+        Cursor query = databaseHelper.queryTask(taskId);
         query.moveToNext();
 
         if(query.getCount() > 0 && query.getInt(1)==taskId){
@@ -250,14 +237,6 @@ public class ViewTasksActivity extends AppCompatActivity {
 
     protected void persistUpvotedTask(int taskId){
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-        String[] projection = {
-                 Database.UpvotedTasksEntry._ID,
-                 Database.UpvotedTasksEntry.COLUMN_TASK_ID,
-        };
-        SQLiteDatabase db_in = databaseHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(Database.UpvotedTasksEntry.COLUMN_TASK_ID, taskId);
-
-        db_in.insert(Database.UpvotedTasksEntry.TABLE_NAME, null, values);
+        databaseHelper.persistUpvotedTask(taskId);
     }
 }
