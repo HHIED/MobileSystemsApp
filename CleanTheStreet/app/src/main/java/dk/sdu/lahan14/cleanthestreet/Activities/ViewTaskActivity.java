@@ -66,7 +66,6 @@ public class ViewTaskActivity extends BasicTaskActivity {
         mAcceptTaskButton = findViewById(R.id.btn_accept_task);
         mTask = ActiveTask.activeTask;
         updateDisplayData();
-        updateDisplayData();
     }
 
     private void updateDisplayData() {
@@ -113,7 +112,7 @@ public class ViewTaskActivity extends BasicTaskActivity {
     public void onUpvote(View view) {
         mTask.incrementScore();
         mUpvoteImageButton.setClickable(false);
-        mScoreTextView.setText(mTask.getScore());
+        mScoreTextView.setText(String.valueOf(mTask.getScore()));
     }
 
     @Override

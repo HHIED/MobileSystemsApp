@@ -1,6 +1,7 @@
 package dk.sdu.lahan14.cleanthestreet.Activities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
@@ -65,9 +67,8 @@ public class CreateTaskActivity extends BasicTaskActivity {
 
     public void onSave(View view) throws UnsupportedEncodingException {
         createTask();
-
-
-
+        Toast.makeText((Context) this, "Task created", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     private void createTask() throws UnsupportedEncodingException {
