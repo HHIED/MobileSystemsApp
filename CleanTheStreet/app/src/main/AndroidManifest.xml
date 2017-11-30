@@ -31,17 +31,23 @@
         </activity>
         <activity
             android:name=".Activities.CreateTaskActivity"
-            android:parentActivityName=".Activities.MainActivity" />
+            android:parentActivityName=".Activities.MainActivity"
+            android:label="@string/title_activity_create_task" />
         <activity
             android:name=".Activities.ViewTaskActivity"
-            android:parentActivityName=".Activities.MainActivity" />
+            android:parentActivityName=".Activities.ViewTasksActivity"
+            android:label="@string/title_activity_view_task" />
         <activity
             android:name=".Activities.CompleteTaskActivity"
-            android:parentActivityName=".Activities.ViewTaskActivity" />
-        <activity android:name=".Activities.ViewTasksActivity" />
-        <activity android:name=".Activities.ApproveCompletedTaskActivity" />
-        <activity
-            android:name=".Activities.ViewMyTasksActivity"
+            android:parentActivityName=".Activities.ViewTaskActivity"
+            android:label="@string/title_activity_complete_task" />
+        <activity android:name=".Activities.ViewTasksActivity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:label="@string/title_activity_view_tasks"/>
+        <activity android:name=".Activities.ApproveCompletedTaskActivity"
+            android:label="@string/title_activity_approve_completed_task" />
+        <activity android:name=".Activities.ViewMyTasksActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:label="@string/title_activity_view_my_tasks"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
