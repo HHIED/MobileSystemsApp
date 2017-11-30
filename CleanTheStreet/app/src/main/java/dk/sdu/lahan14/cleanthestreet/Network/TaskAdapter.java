@@ -78,7 +78,7 @@ public class TaskAdapter extends ArrayAdapter<Task>{
             TextView tt3 = (TextView) v.findViewById(R.id.distance);
             ImageButton upvoteButton = (ImageButton) v.findViewById(R.id.imageButton);
             upvoteButton.setTag(R.id.upvoteId, p.getId());
-            upvoteButton.setFocusable(View.NOT_FOCUSABLE);
+            upvoteButton.setFocusable(false);
             if(upvotedTasks.contains(p.getId())) {
                 upvoteButton.setColorFilter(Color.argb(255, 130, 130, 130));
             } else {
